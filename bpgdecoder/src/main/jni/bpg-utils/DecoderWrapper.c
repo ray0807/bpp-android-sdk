@@ -5,6 +5,8 @@
 #include <android/log.h>
 
 
+static jboolean isVertify;
+
 extern int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize);
 
 extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut,
@@ -12,6 +14,12 @@ extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOu
 
 JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
         (JNIEnv *env, jclass class, jstring packageName, jstring token) {
+        if(isVertify){
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = true");
+        }else{
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = false");
+        isVertify =JNI_TRUE;
+        }
         __android_log_print(ANDROID_LOG_ERROR, "wanglei", "packageName : %s" ,(*env)->GetStringUTFChars(env, packageName, NULL));
         __android_log_print(ANDROID_LOG_ERROR, "wanglei", "token : %s" ,(*env)->GetStringUTFChars(env, token, NULL));
 
