@@ -5,12 +5,12 @@ import android.content.Context;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.xmtj.bgptest.downloader.OkHttpImageDownloader;
+import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.cache.disc.naming.Md5FileNameGenerator;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.ImageLoaderConfiguration;
 import com.xmtj.imagedownloader.core.assist.QueueProcessingType;
-import com.xmtj.imagedownloader.core.decode.BGPImageDecoder;
-import com.xmtj.imagedownloader.core.decode.BaseImageDecoder;
+import com.xmtj.bgptest.decoder.BGPImageDecoder;
 
 /**
  * Created by wanglei on 08/02/17.
@@ -25,10 +25,16 @@ public class App extends Application {
     }
 
     public static void initImageLoader(Context context) {
+
+        //注册解码器
+        BPG.init(context);
+
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by
         //  ImageLoaderConfiguration.createDefault(this);
         // method.
+
+
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();

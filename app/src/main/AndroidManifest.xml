@@ -22,6 +22,10 @@
         <activity android:name=".activity.TestAcitivity" />
         <activity android:name=".activity.SpecialAcitivity" />
         <activity android:name=".activity.ComicViewAcitivity" />
+
+        <meta-data
+            android:name="BPG_TOKEN"
+            android:value="${BPG_TOKEN}" />
     </application>
 
 </manifest>

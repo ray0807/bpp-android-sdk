@@ -1,9 +1,11 @@
-package com.xmtj.imagedownloader.core.decode;
+package com.xmtj.bgptest.decoder;
 
 
 import android.util.Log;
 
 import com.xmtj.bpgdecoder.DecoderWrapper;
+import com.xmtj.imagedownloader.core.decode.BaseImageDecoder;
+import com.xmtj.imagedownloader.core.decode.ImageDecodingInfo;
 import com.xmtj.imagedownloader.utils.IoUtils;
 
 import java.io.ByteArrayInputStream;
@@ -22,18 +24,13 @@ public class BGPImageDecoder extends BaseImageDecoder {
     @Override
     protected InputStream getImageStream(ImageDecodingInfo decodingInfo) throws IOException {
 
-        long t1 = System.currentTimeMillis();
         if (decodingInfo.getOriginalImageUri().contains(".bpg")) {
             InputStream stream = null;
             try {
-                Log.e("bpg_test", "t1:" + t1);
                 stream = decodingInfo.getDownloader()
                         .getStream(decodingInfo.getImageUri(), decodingInfo.getExtraForDownloader());
                 byte[] bytes = toByteArray(stream);
                 byte[] decBuffer = DecoderWrapper.decodeBuffer(bytes, bytes.length);
-                long t2 = System.currentTimeMillis();
-                Log.e("bpg_test", "t2:" + t2);
-                Log.e("bpg_test", "解压时间:" + (t2 - t1));
                 return new ByteArrayInputStream(decBuffer);
             } catch (Exception e) {
                 e.printStackTrace();

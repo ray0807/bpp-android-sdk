@@ -97,7 +97,6 @@ public class ImageLoader {
         if (configuration == null) {
             throw new IllegalArgumentException(ERROR_INIT_CONFIG_WITH_NULL);
         }
-        BPG.init();
         if (this.configuration == null) {
             L.d(LOG_INIT_CONFIG);
             engine = new ImageLoaderEngine(configuration);
