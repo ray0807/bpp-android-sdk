@@ -1,1 +1,1 @@
-include ':app', ':bgpdecoder', ':imagedownloader'
+include ':app', ':bpgdecoder', ':imagedownloader'

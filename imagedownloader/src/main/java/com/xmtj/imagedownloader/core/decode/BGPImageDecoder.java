@@ -3,7 +3,7 @@ package com.xmtj.imagedownloader.core.decode;
 
 import android.util.Log;
 
-import com.xmtj.bgpdecoder.DecoderWrapper;
+import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.utils.IoUtils;
 
 import java.io.ByteArrayInputStream;

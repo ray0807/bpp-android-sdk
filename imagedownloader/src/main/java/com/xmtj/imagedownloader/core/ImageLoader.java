@@ -22,7 +22,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.xmtj.bgpdecoder.BGP;
+import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.cache.disc.DiskCache;
 import com.xmtj.imagedownloader.cache.memory.MemoryCache;
 import com.xmtj.imagedownloader.core.assist.ImageSize;
@@ -97,7 +97,7 @@ public class ImageLoader {
         if (configuration == null) {
             throw new IllegalArgumentException(ERROR_INIT_CONFIG_WITH_NULL);
         }
-        BGP.init();
+        BPG.init();
         if (this.configuration == null) {
             L.d(LOG_INIT_CONFIG);
             engine = new ImageLoaderEngine(configuration);

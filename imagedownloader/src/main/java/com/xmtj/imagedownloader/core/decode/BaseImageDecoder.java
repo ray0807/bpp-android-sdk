@@ -20,10 +20,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.util.Log;
 
-import com.xmtj.bgpdecoder.DecoderWrapper;
-import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.assist.ImageScaleType;
 import com.xmtj.imagedownloader.core.assist.ImageSize;
 import com.xmtj.imagedownloader.core.download.ImageDownloader;
