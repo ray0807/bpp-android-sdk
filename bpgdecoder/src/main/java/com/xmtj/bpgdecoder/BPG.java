@@ -24,8 +24,9 @@ public class BPG {
             appInfo = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA);
-            String msg = appInfo.metaData.getString("BPG_TOKEN");
-            Log.e("bpg", "init  BPG_TOKEN : " + msg);
+            String token = appInfo.metaData.getString("BPG_TOKEN");
+            Log.e("bpg", "init  BPG_TOKEN : " + token);
+            DecoderWrapper.init(context.getPackageName(), token);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -4,10 +4,18 @@
 #include <stdlib.h>
 #include <android/log.h>
 
+
 extern int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize);
 
 extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut,
                           unsigned int *bufOutLen, enum DecodeTo format);
+
+JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
+        (JNIEnv *env, jclass class, jstring packageName, jstring token) {
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "packageName : %s" ,(*env)->GetStringUTFChars(env, packageName, NULL));
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "token : %s" ,(*env)->GetStringUTFChars(env, token, NULL));
+
+}
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize
         (JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize) {

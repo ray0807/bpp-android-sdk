@@ -20,6 +20,10 @@ JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBuffe
 JNIEXPORT jbyteArray JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBufferV2
         (JNIEnv *, jclass, jbyteArray, jint);
 
+
+JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
+        (JNIEnv *, jclass, jstring, jstring);
+
 #ifdef __cplusplus
 }
 #endif

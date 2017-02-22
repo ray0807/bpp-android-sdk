@@ -78,8 +78,6 @@ public class ComicViewerAdapter extends BaseAdapter {
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                 try {
                     if (bitmap != null) {
-                        Log.e("wanglei", "bitmap.width:" + bitmap.getWidth());
-                        Log.e("wanglei", "bitmap.height:" + bitmap.getHeight());
                         ViewGroup.LayoutParams params = iv_comic_viewer.getLayoutParams();
                         params.width = screenWidth;
                         params.height = bitmap.getHeight() * screenWidth / bitmap.getWidth();
