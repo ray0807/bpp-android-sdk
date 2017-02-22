@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BgpTest.iml" filepath="$PROJECT_DIR$/BgpTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bgpdecoder/bgpdecoder.iml" filepath="$PROJECT_DIR$/bgpdecoder/bgpdecoder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imagedownloader/imagedownloader.iml" filepath="$PROJECT_DIR$/imagedownloader/imagedownloader.iml" />
+    </modules>
+  </component>
+</project>
