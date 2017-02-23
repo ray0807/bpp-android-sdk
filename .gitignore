@@ -6,4 +6,6 @@
 .DS_Store
 /build
 /captures
+/bpgdecoder/src/main/libs
+/bpgdecoder/src/main/obj
 .externalNativeBuild
