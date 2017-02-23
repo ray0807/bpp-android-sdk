@@ -16,7 +16,7 @@ public class BPG {
         System.loadLibrary("bpg_decoder");
     }
 
-    public static void init(Context context) {
+    public static void init(final Context context) {
 
         Log.e("bpg", "init 包名: " + context.getPackageName());
         ApplicationInfo appInfo = null;
@@ -24,9 +24,14 @@ public class BPG {
             appInfo = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA);
-            String token = appInfo.metaData.getString("BPG_TOKEN");
+            final String token = appInfo.metaData.getString("BPG_TOKEN");
             Log.e("bpg", "init  BPG_TOKEN : " + token);
-            DecoderWrapper.init(context.getPackageName(), token);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DecoderWrapper.init(context.getPackageName(), token);
+                }
+            }).start();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

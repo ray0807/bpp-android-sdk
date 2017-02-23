@@ -7,6 +7,7 @@ LOCAL_SRC_FILES := decoder.c DecoderWrapper.c
 
 #LOCAL_CFLAGS += 
 
+LOCAL_SHARED_LIBRARIES := libcutils
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libbpg
 LOCAL_LDLIBS = -L$(SYSROOT)/usr/lib -llog
 
