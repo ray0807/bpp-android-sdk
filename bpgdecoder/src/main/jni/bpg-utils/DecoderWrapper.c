@@ -3,6 +3,7 @@
 #include "decode.h"
 #include <stdlib.h>
 #include <android/log.h>
+#include "libhttp_public.h"
 
 
 static jboolean isVertify;
@@ -12,18 +13,7 @@ extern int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize);
 extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut,
                           unsigned int *bufOutLen, enum DecodeTo format);
 
-JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
-        (JNIEnv *env, jclass class, jstring packageName, jstring token) {
-        if(isVertify){
-        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = true");
-        }else{
-        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = false");
-        isVertify =JNI_TRUE;
-        }
-        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "packageName : %s" ,(*env)->GetStringUTFChars(env, packageName, NULL));
-        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "token : %s" ,(*env)->GetStringUTFChars(env, token, NULL));
 
-}
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize
         (JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize) {
@@ -89,4 +79,122 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
             return JNI_ERR;
         }
     }
+}
+
+
+
+static nhr_request test_post_request = NULL;
+static int test_post_error = 0;
+static nhr_bool test_post_working = 0;
+
+static void test_post_on_error(nhr_request request, nhr_error_code error_code) {
+	__android_log_print(ANDROID_LOG_INFO, "wanglei", "Responce error: %i",(int)error_code);
+	test_post_error = error_code;
+	test_post_working = nhr_false;
+}
+
+static int test_post_parse_body(const char * body, unsigned long test_number) {
+
+	__android_log_print(ANDROID_LOG_INFO, "wanglei", "test_post_parse_body body: %s",body);
+
+	return 12;
+}
+
+static void test_post_log_body(const char * body, const unsigned int body_len) {
+	unsigned int i;
+	if (!body || body_len == 0) return;
+	for (i = 0; i < body_len; i++) {
+	    __android_log_print(ANDROID_LOG_INFO, "wanglei", "test_post_log_body %c",body[i]);
+	}
+}
+
+static void test_post_on_response(nhr_request request, nhr_response responce) {
+	char * body = nhr_response_get_body(responce);
+	unsigned int body_len = nhr_response_get_body_length(responce);
+	unsigned long test_number = (unsigned long)nhr_request_get_user_object(request);
+	test_post_error = 1;
+
+    __android_log_print(ANDROID_LOG_INFO, "wanglei", "\nResponce #%lu:\n", test_number);
+	test_post_log_body(body, body_len);
+	if (test_number == 0) {
+		test_post_error = 10;
+		test_post_working = nhr_false;
+		return;
+	}
+
+	if (nhr_response_get_status_code(responce) != 200) {
+		test_post_error = 15;
+		test_post_working = nhr_false;
+		return;
+	}
+
+	if (body && body_len) {
+		test_post_error = test_post_parse_body(body, test_number);
+	} else {
+		test_post_error = 5;
+	}
+
+	test_post_working = nhr_false;
+}
+
+static int test_post_number(unsigned long number) {
+
+	test_post_request = nhr_request_create();
+
+	switch (number) {
+		case 1: nhr_request_set_url(test_post_request, "http", "httpbin.org", "/post", 80); break;
+		default:
+			break;
+	}
+
+
+	nhr_request_set_method(test_post_request, nhr_method_POST);
+	nhr_request_set_timeout(test_post_request, 10);
+
+	nhr_request_set_user_object(test_post_request, (void*)number);
+
+	nhr_request_add_header_field(test_post_request, "Cache-control", "no-cache");
+	nhr_request_add_header_field(test_post_request, "Accept-Charset", "utf-8");
+	nhr_request_add_header_field(test_post_request, "Accept", "application/json");
+	nhr_request_add_header_field(test_post_request, "Connection", "close");
+	nhr_request_add_header_field(test_post_request, "User-Agent", "CMake tests");
+
+	switch (number) {
+		case 1:
+
+			break;
+
+		default:
+			break;
+	}
+
+	nhr_request_set_on_recvd_responce(test_post_request, &test_post_on_response);
+	nhr_request_set_on_error(test_post_request, &test_post_on_error);
+	test_post_working = nhr_request_send(test_post_request);
+
+	if (test_post_working) test_post_error = 0;
+	else test_post_error = 4;
+
+	while (test_post_working) {
+		nhr_thread_sleep(20);
+	}
+
+	nhr_thread_sleep(834); // just delay between requests
+
+	return test_post_error;
+}
+
+
+JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
+        (JNIEnv *env, jclass class, jstring packageName, jstring token) {
+        if(isVertify){
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = true");
+        }else{
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "is vertify = false");
+        isVertify =JNI_TRUE;
+        }
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "packageName : %s" ,(*env)->GetStringUTFChars(env, packageName, NULL));
+        __android_log_print(ANDROID_LOG_ERROR, "wanglei", "token : %s" ,(*env)->GetStringUTFChars(env, token, NULL));
+
+        test_post_number(1);
 }
