@@ -15,7 +15,8 @@ LOCAL_SRC_FILES :=  ./src/nhr_common.c \
                    	./src/nhr_request_public.c \
                    	./src/nhr_response.c \
                    	./src/nhr_string.c \
-                   	./src/nhr_thread.c
+                   	./src/nhr_thread.c \
+					./cJSON/cJSON.c
 LOCAL_CFLAGS += -Os \
 				-Wall \
 				-MMD \

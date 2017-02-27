@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include "../http/cJSON/cJSON.h"
 
 #if defined(CMAKE_BUILD)
 #undef CMAKE_BUILD
@@ -49,7 +50,7 @@
 #undef CMAKE_BUILD
 #endif
 
-#include "cJSON/cJSON.h"
+
 
 // test_libnhr_creation
 
