@@ -10,7 +10,7 @@ import com.xmtj.imagedownloader.cache.disc.naming.Md5FileNameGenerator;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.ImageLoaderConfiguration;
 import com.xmtj.imagedownloader.core.assist.QueueProcessingType;
-import com.xmtj.bgptest.decoder.BGPImageDecoder;
+import com.xmtj.bgptest.decoder.BpgImageDecoder;
 
 /**
  * Created by wanglei on 08/02/17.
@@ -18,16 +18,24 @@ import com.xmtj.bgptest.decoder.BGPImageDecoder;
 
 public class App extends Application {
 
+    private static Context mContext;
+
     @Override
     public void onCreate() {
         initImageLoader(this);
         super.onCreate();
     }
 
-    public static void initImageLoader(Context context) {
 
+    public static Context getMContext() {
+        return mContext;
+    }
+
+    public static void initImageLoader(Context context) {
+        mContext = context;
         //注册解码器
         BPG.init(context);
+
 
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by
@@ -39,7 +47,7 @@ public class App extends Application {
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();
         config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.imageDecoder(new BGPImageDecoder(true));
+        config.imageDecoder(new BpgImageDecoder(true));
         config.imageDownloader(new OkHttpImageDownloader(context, new OkHttpClient()));
         config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
         config.tasksProcessingOrder(QueueProcessingType.FIFO);

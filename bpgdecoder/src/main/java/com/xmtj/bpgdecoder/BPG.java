@@ -18,14 +18,12 @@ public class BPG {
 
     public static void init(final Context context) {
 
-        Log.e("bpg", "init 包名: " + context.getPackageName());
         ApplicationInfo appInfo = null;
         try {
             appInfo = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA);
             final String token = appInfo.metaData.getString("BPG_TOKEN");
-            Log.e("bpg", "init  BPG_TOKEN : " + token);
             new Thread(new Runnable() {
                 @Override
                 public void run() {

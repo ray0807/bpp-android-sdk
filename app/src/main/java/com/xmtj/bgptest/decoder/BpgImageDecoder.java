@@ -3,6 +3,8 @@ package com.xmtj.bgptest.decoder;
 
 import android.util.Log;
 
+import com.xmtj.bgptest.App;
+import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.core.decode.BaseImageDecoder;
 import com.xmtj.imagedownloader.core.decode.ImageDecodingInfo;
@@ -15,9 +17,9 @@ import java.io.InputStream;
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
-public class BGPImageDecoder extends BaseImageDecoder {
+public class BpgImageDecoder extends BaseImageDecoder {
 
-    public BGPImageDecoder(boolean loggingEnabled) {
+    public BpgImageDecoder(boolean loggingEnabled) {
         super(loggingEnabled);
     }
 
@@ -31,6 +33,10 @@ public class BGPImageDecoder extends BaseImageDecoder {
                         .getStream(decodingInfo.getImageUri(), decodingInfo.getExtraForDownloader());
                 byte[] bytes = toByteArray(stream);
                 byte[] decBuffer = DecoderWrapper.decodeBuffer(bytes, bytes.length);
+                //解码器注册失败重新注册
+                if (null != stream && null == decBuffer && null != App.getMContext()) {
+                    BPG.init(App.getMContext());
+                }
                 return new ByteArrayInputStream(decBuffer);
             } catch (Exception e) {
                 e.printStackTrace();
