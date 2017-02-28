@@ -18,8 +18,8 @@ extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOu
 static nhr_request test_post_request = NULL;
 static int test_post_error = 0;
 static nhr_bool test_post_working = 0;
-static const char * test_get_param_name1 = "test_get_param_name1";
-static const char * test_get_param_value1 = "test_get_param_value1";
+static const char *test_get_param_name1 = "test_get_param_name1";
+static const char *test_get_param_value1 = "test_get_param_value1";
 
 static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 {
@@ -30,14 +30,20 @@ static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 
 static int test_post_parse_body(const char *body, unsigned long test_number)
 {
-    cJSON * json = cJSON_ParseWithOpts(body, NULL, 0);
-	cJSON * args = json ? cJSON_GetObjectItem(json, "args") : NULL;
-	cJSON * headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
-	cJSON * param1 = args ? cJSON_GetObjectItem(args, test_get_param_name1) : NULL;
-	cJSON * deflated = json ? cJSON_GetObjectItem(json, "deflated") : NULL;
-	cJSON * gzipped = json ? cJSON_GetObjectItem(json, "gzipped") : NULL;
-    
+    cJSON *json = cJSON_ParseWithOpts(body, NULL, 0);
+    cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
+    cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
+    cJSON *param1 = args ? cJSON_GetObjectItem(args, test_get_param_name1) : NULL;
+    cJSON *deflated = json ? cJSON_GetObjectItem(json, "deflated") : NULL;
+    cJSON *gzipped = json ? cJSON_GetObjectItem(json, "gzipped") : NULL;
+
+    cJSON *host = headers ? cJSON_GetObjectItem(headers, "Host") : NULL;
+
     __android_log_print(ANDROID_LOG_INFO, TAG, "test_post_parse_body body: %s", body);
+    if (host)
+    {
+        __android_log_print(ANDROID_LOG_INFO, TAG, "test_post_parse_body host: %s", host->valuestring);
+    }
 
     return 12;
 }
