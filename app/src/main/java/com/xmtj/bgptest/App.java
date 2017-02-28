@@ -56,4 +56,5 @@ public class App extends Application {
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config.build());
     }
+
 }

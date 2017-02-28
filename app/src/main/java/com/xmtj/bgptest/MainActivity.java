@@ -9,6 +9,7 @@ import android.view.View;
 import com.xmtj.bgptest.activity.ComicViewAcitivity;
 import com.xmtj.bgptest.activity.SpecialAcitivity;
 import com.xmtj.bgptest.activity.TestAcitivity;
+import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.core.ImageLoader;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,8 +64,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        BPG.destory();
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         ImageLoader.getInstance().stop();
+
         super.onBackPressed();
     }
 

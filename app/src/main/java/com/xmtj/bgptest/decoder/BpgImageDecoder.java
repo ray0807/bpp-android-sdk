@@ -31,8 +31,7 @@ public class BpgImageDecoder extends BaseImageDecoder {
             try {
                 stream = decodingInfo.getDownloader()
                         .getStream(decodingInfo.getImageUri(), decodingInfo.getExtraForDownloader());
-                byte[] bytes = toByteArray(stream);
-                byte[] decBuffer = DecoderWrapper.decodeBuffer(bytes, bytes.length);
+                byte[] decBuffer = DecoderWrapper.decodeBpgBuffer(stream);
                 //解码器注册失败重新注册
                 if (null != stream && null == decBuffer && null != App.getMContext()) {
                     BPG.init(App.getMContext());

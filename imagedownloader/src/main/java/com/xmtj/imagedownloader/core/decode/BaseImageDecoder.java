@@ -253,14 +253,4 @@ public class BaseImageDecoder implements ImageDecoder {
             this.exif = exif;
         }
     }
-
-    public static byte[] toByteArray(InputStream input) throws IOException {
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        while ((bytesRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
-        }
-        return output.toByteArray();
-    }
 }
