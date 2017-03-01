@@ -74,7 +74,7 @@ public class SpecialAcitivity extends Activity {
                 try {
                     byte[] b = DecoderWrapper.decodeBpgBuffer(is);
                     iv_show.setImageBitmap(BitmapFactory.decodeByteArray(b, 0, b.length));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

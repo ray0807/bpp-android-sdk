@@ -46,9 +46,12 @@ public class BPG {
      *
      * @param context
      */
-    public static void init(final Context context) {
+    public static void init(Context context) {
+        if (null == context) {
+            throw new RuntimeException("注册失败：context为null");
+        }
         mContext = context;
-        if (mDBhelperManager == null) {
+        if (null == mDBhelperManager) {
             mDBhelperManager = new DBHelperManager(context);
         }
         ApplicationInfo appInfo = null;
@@ -60,7 +63,7 @@ public class BPG {
             singleThreadExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    DecoderWrapper.init(context.getPackageName(), token);
+                    DecoderWrapper.init(mContext.getPackageName(), token);
                     uploadAll();
                 }
 
