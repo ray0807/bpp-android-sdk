@@ -37,7 +37,7 @@ public class BPG {
     }
 
 
-    public static ExecutorService getSingleThreadExecutor() {
+    protected static ExecutorService getSingleThreadExecutor() {
         return singleThreadExecutor;
     }
 
@@ -84,8 +84,9 @@ public class BPG {
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
                         Log.e("wanglei", "bpg_key:" + bpg_key);
                         Log.e("wanglei", "count:" + count);
-                        
+
                     }
+                    mDBhelperManager.removeAllBpgCount();
                 }
 
             } catch (Exception e) {
