@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DecoderWrapper {
-    public static native void init(String packageName, String token);
+    protected static native void init(String packageName, String token);
 
     private static native int fetchDecodedBufferSize(byte[] encBuffer, int encBufferSize);
 

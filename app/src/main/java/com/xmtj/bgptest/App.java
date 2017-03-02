@@ -3,6 +3,7 @@ package com.xmtj.bgptest;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.xmtj.bgptest.downloader.OkHttpImageDownloader;
 import com.xmtj.bpgdecoder.BPG;
@@ -31,11 +32,13 @@ public class App extends Application {
         return mContext;
     }
 
-    public static void initImageLoader(Context context) {
+    public void initImageLoader(Context context) {
         mContext = context;
+        LeakCanary.install(this);
         //注册解码器
         BPG.init(context);
 
+        //监测内存泄漏
 
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by

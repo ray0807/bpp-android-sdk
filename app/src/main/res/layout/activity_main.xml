@@ -52,5 +52,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:autoLink="web"
-        android:text="1.使用此图片下载框架，请引用imagedownloader-release.aar和bgpdecoder-release.aar\n2.图片框架使用的基本配置请查看 https://github.com/nostra13/Android-Universal-Image-Loader （本框架基于此框架编写） " />
+        android:text="1.使用此图片下载框架，请引用bgpdecoder-release.aar 作为解码器\n2.本例中使用的图片框架为Android-Universal-Image-Loader，其使用的基本配置请查看 https://github.com/nostra13/Android-Universal-Image-Loader\n3.也可以使用其他或者自定义图片显示框架，只需要自定义解码器即可，请参考demo中的BpgImageDecoder，以及Application中的注册方式。 " />
 </LinearLayout>
