@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="输入图片url"
-        android:text="http://mkz.oss-cn-hangzhou.aliyuncs.com/test/black_bear.bpg" />
+        android:text="http://bpg.mkzcdn.com/test/20170306/bignum.bpg" />
 
     <Button
         android:id="@+id/btn_load_url"

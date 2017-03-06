@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Debug;
 import android.util.Log;
 
 import com.xmtj.bpgdecoder.db.DBHelperManager;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 
 public class BPG {
 
+    public static final String BPG_TAG = "xmtj_bpgdecoder";
 
     // Load library
     static {
@@ -63,6 +65,9 @@ public class BPG {
             singleThreadExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(BPG_TAG, "bpg start init");
+                    Log.i(BPG_TAG, "packageName:" + mContext.getPackageName());
+                    Log.i(BPG_TAG, "token:" + token);
                     DecoderWrapper.init(mContext.getPackageName(), token);
                     uploadAll();
                 }
@@ -75,6 +80,7 @@ public class BPG {
 
     }
 
+
     private static void uploadAll() {
         if (null != mDBhelperManager) {
             Cursor queryCursor = null;
@@ -85,8 +91,8 @@ public class BPG {
                     while (queryCursor.moveToNext()) {
                         String bpg_key = queryCursor.getString(0);//获取第二列的值
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
-                        Log.e("wanglei", "bpg_key:" + bpg_key);
-                        Log.e("wanglei", "count:" + count);
+                        Log.e(BPG_TAG, "bpg_key:" + bpg_key);
+                        Log.e(BPG_TAG, "count:" + count);
 
                     }
                     mDBhelperManager.removeAllBpgCount();
@@ -104,6 +110,7 @@ public class BPG {
             }
         }
     }
+
 
     public static void destory() {
         mContext = null;

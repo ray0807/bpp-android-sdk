@@ -8,7 +8,7 @@
 
 static jboolean isVertify;
 static unsigned int canUseCount = 20;
-static const char *TAG = "bpg_decoder";
+static const char *TAG = "xmtj_bpgdecoder";
 
 extern int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize);
 

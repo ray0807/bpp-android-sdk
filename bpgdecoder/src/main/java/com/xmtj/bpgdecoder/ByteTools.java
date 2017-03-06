@@ -16,31 +16,51 @@ import java.io.InputStream;
 public class ByteTools {
     protected static byte[] toByteArray(InputStream input) throws IOException {
         byte[] countByte = new byte[1];
+        long id = 0;
         if (input.read(countByte) > 0) {
-            Log.e("wanglei", "countByte:" + countByte[0]);
             byte[] idByte = new byte[countByte[0]];
-            Log.e("wanglei", "idByte.length: " + idByte.length);
-            long id = 0;
+            long b0 = 0;
+            long b1 = 0;
+            long b2 = 0;
+            long b3 = 0;
             switch (input.read(idByte)) {
                 case 0:
                     break;
                 case 1:
-                    id = idByte[0];
-                    Log.e("wanglei", "id:" + id);
+                    id = idByte[0] & 0xff;
                     break;
                 case 2:
-                    id = ((idByte[0] << 8) + idByte[1]);
-                    Log.e("wanglei", "id:" + id);
+                    b0 = idByte[0] & 0xff;
+                    b1 = idByte[1] & 0xff;
+                    id = ((b0 << 8) + b1);
+                    break;
+                case 3:
+                    b0 = idByte[0] & 0xff;
+                    b1 = idByte[1] & 0xff;
+                    b2 = idByte[2] & 0xff;
+                    id = ((b0 << 16) + (b1 << 8) + b2);
+                    break;
+                case 4:
+                    b0 = idByte[0] & 0xff;
+                    b1 = idByte[1] & 0xff;
+                    b2 = idByte[2] & 0xff;
+                    b3 = idByte[3] & 0xff;
+                    id = ((b0 << 24) + (b1 << 16) + (b2 << 8) + b3);
                     break;
                 default:
-                    id = 1;
+                    id = 0;
                     break;
             }
             if (id > 0) {
-                saveIds(id);
+                BPG.getSingleThreadExecutor().execute(new BpgSaveIdThread(id));
             }
 
         }
+        if (id <= 0) {
+            Log.e(BPG.BPG_TAG, "Illegal image resource");
+            return null;
+        }
+
 
         byte[] buffer = new byte[1024];
         int bytesRead;
@@ -63,7 +83,6 @@ public class ByteTools {
                 if (queryCursor != null) {
                     if (queryCursor.getCount() > 0) {
                         count = queryCursor.getInt(1);
-                        Log.e("wanglei", "queryCursor.getInt(1):" + count);
                     }
                 }
                 count++;
@@ -86,5 +105,18 @@ public class ByteTools {
 
         }
 
+    }
+
+    private static class BpgSaveIdThread implements Runnable {
+        private long id = 0;
+
+        public BpgSaveIdThread(long id) {
+            this.id = id;
+        }
+
+        @Override
+        public void run() {
+            saveIds(id);
+        }
     }
 }

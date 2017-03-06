@@ -11,12 +11,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.xmtj.bgptest.R;
-import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.core.DisplayImageOptions;
 import com.xmtj.imagedownloader.core.ImageLoader;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
