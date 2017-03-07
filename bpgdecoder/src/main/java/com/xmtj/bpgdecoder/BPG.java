@@ -100,8 +100,6 @@ public class BPG {
                     while (queryCursor.moveToNext()) {
                         long bpg_key = queryCursor.getLong(0);//获取第二列的值
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
-                        Log.e(BPG_TAG, "bpg_key:" + bpg_key);
-                        Log.e(BPG_TAG, "count:" + count);
                         Map<String, Long> m = new HashMap<>();
                         m.put("id", bpg_key);
                         m.put("count", (long) count);
