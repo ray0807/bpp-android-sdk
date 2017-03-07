@@ -75,16 +75,11 @@ public class ComicViewerAdapter extends BaseAdapter {
         final ImageView iv_comic_viewer = ViewHolder.get(view, R.id.iv_comic_viewer);
 
         if (type == ComicViewAcitivity.BPG_VIEWER) {
-            DecoderWrapper.getBpgUrl(datas[position], new UrlCallback() {
+            DecoderWrapper.getBpgUrl(activity, datas[position], new UrlCallback() {
                 @Override
                 public void onUrlReceive(String smallerUrl) {
-                    Log.e("wanglei", "smallerUrl: " + smallerUrl);
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setImage(datas[position], iv_comic_viewer);
-                        }
-                    });
+                    Log.e("wanglei", "smallerUrl:" + smallerUrl);
+                    setImage(smallerUrl, iv_comic_viewer);
                 }
             });
         } else {

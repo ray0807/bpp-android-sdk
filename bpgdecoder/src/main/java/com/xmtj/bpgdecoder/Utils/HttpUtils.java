@@ -45,10 +45,10 @@ public class HttpUtils {
                 return dealResponseResult(inptStream);                     //处理服务器的响应结果
             }
         } catch (IOException e) {
-            //e.printStackTrace();
-            return "err: " + e.getMessage().toString();
+            e.printStackTrace();
+            return "";
         }
-        return "-1";
+        return "";
     }
 
     /*
