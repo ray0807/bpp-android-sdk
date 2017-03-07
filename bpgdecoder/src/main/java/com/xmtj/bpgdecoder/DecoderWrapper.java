@@ -20,6 +20,8 @@ import java.util.Map;
 public class DecoderWrapper {
     protected static native void init(String packageName, String token);
 
+    protected static native boolean getInitState(String packageName, String token);
+
     private static native int fetchDecodedBufferSize(byte[] encBuffer, int encBufferSize);
 
     private static native byte[] decodeBuffer(byte[] encBuffer, int encBufferSize);
@@ -42,7 +44,7 @@ public class DecoderWrapper {
         if (BPG.getmContext() == null) {
             return;
         }
-        if (BPG.getSingleThreadExecutor() != null) {
+        if (BPG.getSingleThreadExecutor() != null && getInitState(BPG.getmContext().getPackageName(), BPG.getToken())) {
             final Map<String, String> params = new HashMap<>();
             params.put("app_name", BPG.getmContext().getPackageName());
             params.put("app_key", BPG.getToken());
@@ -70,6 +72,11 @@ public class DecoderWrapper {
                     }
                 }
             });
+        } else {
+            Log.e(BPG.BPG_TAG, "please init bpg sdk");
+            if (callback != null) {
+                callback.onUrlReceive(url);
+            }
         }
     }
 }

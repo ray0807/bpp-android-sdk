@@ -6,7 +6,7 @@
 #include "libhttp_public.h"
 #include "../http/libnhr.h"
 
-static jboolean isVertify;
+static jboolean isVertify = JNI_FALSE;
 static unsigned int canUseCount = 20;
 static const char *TAG = "xmtj_bpgdecoder";
 
@@ -30,7 +30,7 @@ static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 
 static int test_post_parse_body(const char *body)
 {
-    //__android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
     cJSON *json = cJSON_ParseWithOpts(body, NULL, 0);
     // cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
     // cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
@@ -44,6 +44,7 @@ static int test_post_parse_body(const char *body)
     cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
     int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
     __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init errorCode : %d", errorCode);
     if (errorCode == 0)
     {
         isVertify = JNI_TRUE;
@@ -96,7 +97,7 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
     test_post_working = nhr_false;
 }
 
-static int test_post_number(const char *packageName,const char *token)
+static int test_post_number(const char *packageName, const char *token)
 {
 
     if (test_post_working)
@@ -156,6 +157,11 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), (*env)->GetStringUTFChars(env, token, NULL));
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
+}
+
+JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState(JNIEnv *env, jclass class, jstring packageName, jstring token)
+{
+    return isVertify;
 }
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize(JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize)
