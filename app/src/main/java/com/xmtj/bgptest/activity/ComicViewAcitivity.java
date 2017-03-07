@@ -38,7 +38,6 @@ public class ComicViewAcitivity extends Activity {
         type = getIntent().getIntExtra(TYPE_TAG, 1);
 
         rlv_viewer_list = (ScrollZoomListView) findViewById(R.id.rlv_viewer_list);
-        rlv_viewer_list.setAdapter(new ComicViewerAdapter(this, type == BPG_VIEWER ? Constant.BGP_VIEWER_IMAGES : Constant.JPG_VIEWER_IMAGES));
-
+        rlv_viewer_list.setAdapter(new ComicViewerAdapter(this, type));
     }
 }

@@ -1,5 +1,6 @@
 package com.xmtj.bgptest.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,13 +12,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.xmtj.bgptest.Constant;
 import com.xmtj.bgptest.R;
+import com.xmtj.bgptest.activity.ComicViewAcitivity;
 import com.xmtj.bgptest.utils.DisplayUtil;
 import com.xmtj.bgptest.utils.ViewHolder;
+import com.xmtj.bpgdecoder.BPG;
+import com.xmtj.bpgdecoder.DecoderWrapper;
+import com.xmtj.bpgdecoder.iInterface.UrlCallback;
 import com.xmtj.imagedownloader.core.DisplayImageOptions;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.assist.FailReason;
-import com.xmtj.imagedownloader.core.display.CircleBitmapDisplayer;
 import com.xmtj.imagedownloader.core.listener.ImageLoadingListener;
 
 /**
@@ -29,10 +34,15 @@ public class ComicViewerAdapter extends BaseAdapter {
     private String datas[];
     private DisplayImageOptions options;
     private int screenWidth = 0;
+    private int type;
 
-    public ComicViewerAdapter(Context context, String[] datas) {
+    private Activity activity;
+
+    public ComicViewerAdapter(Context context, int type) {
         this.context = context;
-        this.datas = datas;
+        activity = (Activity) context;
+        this.type = type;
+        this.datas = Constant.JPG_VIEWER_IMAGES;
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -57,13 +67,36 @@ public class ComicViewerAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(final int position, View view, ViewGroup viewGroup) {
         if (view == null) {
 
             view = LayoutInflater.from(context).inflate(R.layout.item_viewer, viewGroup, false);
         }
         final ImageView iv_comic_viewer = ViewHolder.get(view, R.id.iv_comic_viewer);
-        ImageLoader.getInstance().displayImage(datas[position], iv_comic_viewer, options, new ImageLoadingListener() {
+
+        if (type == ComicViewAcitivity.BPG_VIEWER) {
+            DecoderWrapper.getBpgUrl(datas[position], new UrlCallback() {
+                @Override
+                public void onUrlReceive(String smallerUrl) {
+                    Log.e("wanglei", "smallerUrl: " + smallerUrl);
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setImage(datas[position], iv_comic_viewer);
+                        }
+                    });
+                }
+            });
+        } else {
+            setImage(datas[position], iv_comic_viewer);
+        }
+
+
+        return view;
+    }
+
+    private void setImage(String smallerUrl, final ImageView iv_comic_viewer) {
+        ImageLoader.getInstance().displayImage(smallerUrl, iv_comic_viewer, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
 
@@ -94,7 +127,6 @@ public class ComicViewerAdapter extends BaseAdapter {
 
             }
         });
-        return view;
     }
 
 

@@ -4,16 +4,16 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Debug;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.xmtj.bpgdecoder.Utils.HttpUtils;
 import com.xmtj.bpgdecoder.db.DBHelperManager;
+import com.xmtj.bpgdecoder.iInterface.UrlCallback;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +29,15 @@ import java.util.concurrent.Executors;
 public class BPG {
 
     public static final String BPG_TAG = "xmtj_bpgdecoder";
+    private static String token;
 
     // Load library
     static {
         System.loadLibrary("bpg_decoder");
+    }
+
+    public static String getToken() {
+        return token;
     }
 
     private static ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
@@ -70,7 +75,7 @@ public class BPG {
             appInfo = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA);
-            final String token = appInfo.metaData.getString("BPG_TOKEN");
+            token = appInfo.metaData.getString("BPG_TOKEN");
             singleThreadExecutor.execute(new Runnable() {
                 @Override
                 public void run() {

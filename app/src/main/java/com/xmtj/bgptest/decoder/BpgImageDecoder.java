@@ -26,7 +26,7 @@ public class BpgImageDecoder extends BaseImageDecoder {
     @Override
     protected InputStream getImageStream(ImageDecodingInfo decodingInfo) throws IOException {
 
-        if (decodingInfo.getOriginalImageUri().contains(".bpg")) {
+        if (decodingInfo.getOriginalImageUri().contains(".xmtj")) {
             InputStream stream = null;
             try {
                 stream = decodingInfo.getDownloader()

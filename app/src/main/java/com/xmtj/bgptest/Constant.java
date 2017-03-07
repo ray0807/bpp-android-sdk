@@ -7,28 +7,24 @@ package com.xmtj.bgptest;
 public class Constant {
 
     public static final String[] BGP_IMAGES = new String[]{
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/black_bear.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/a1.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/cats.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/kayac.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/out.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/picture_clock.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/squirrel.bpg"
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bab502f5.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bf12426a.bpg"
     };
     public static final String[] NORMAL_BGP_IMAGES = new String[]{
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/black_bear.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "https://lh4.googleusercontent.com/--dq8niRp7W4/URquVgmXvgI/AAAAAAAAAbs/-gnuLQfNnBA/s1024/A%252520Song%252520of%252520Ice%252520and%252520Fire.jpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/a1.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "https://lh3.googleusercontent.com/-D_5lNxnDN6g/URqu2Tk7HVI/AAAAAAAAAbs/p0ddca9W__Y/s1024/Lost%252520in%252520a%252520Field.jpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/cats.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "http://img001.us.expono.com/100001/100001-1bc30-2d736f_m.jpg", // EXIF
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/kayac.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "http://bit.ly/soBiXr", // Redirect link
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/out.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "http://www.ioncannon.net/wp-content/uploads/2011/06/test9.webp", // WebP image
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/picture_clock.bpg",
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
             "http://cdn.urbanislandz.com/wp-content/uploads/2011/10/MMSposter-large.jpg", // Very large image
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/squirrel.bpg"
+            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg"
     };
 
     public static final String[] NORMAL_IMAGES = new String[]{
@@ -174,27 +170,38 @@ public class Constant {
     };
 
 
-    public static final String[] BGP_VIEWER_IMAGES = new String[]{
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/1.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/2.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/3.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/4.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/5.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/6.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/7.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/8.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/9.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/10.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/11.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/12.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/13.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/14.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/15.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/16.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/17.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/18.bpg",
-            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/19.bpg",
-    };
+//    public static final String[] BGP_VIEWER_IMAGES = new String[]{
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/1.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/2.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/3.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/4.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/5.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/6.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/7.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/8.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/9.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/10.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/11.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/12.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/13.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/14.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/15.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/16.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/17.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/18.bpg",
+//            "http://mkz.oss-cn-hangzhou.aliyuncs.com/test/bgp/out/19.bpg",
+//    };
+//    public static final String[] BGP_VIEWER_IMAGES = new String[]{
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bab502f5.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bf12426a.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bab502f5.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bf12426a.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be69d2902ed.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bab502f5.bpg",
+//            "http://oss.mkzcdn.com/test/bpg/20170307/58be6bf12426a.bpg"
+//    };
     public static final String[] JPG_VIEWER_IMAGES = new String[]{
             "http://oss.mkzcdn.com/comic/20170101/58651a02ae82c-1500x2332.jpg",
             "http://oss.mkzcdn.com/comic/20170101/58651a04160b1-1500x2332.jpg",

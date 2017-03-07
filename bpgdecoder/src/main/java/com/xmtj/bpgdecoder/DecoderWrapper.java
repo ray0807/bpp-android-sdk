@@ -1,10 +1,17 @@
 package com.xmtj.bpgdecoder;
 
 
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
+
+import com.xmtj.bpgdecoder.Utils.HttpUtils;
+import com.xmtj.bpgdecoder.iInterface.UrlCallback;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DecoderWrapper {
     protected static native void init(String packageName, String token);
@@ -25,5 +32,29 @@ public class DecoderWrapper {
             e.printStackTrace();
         }
         return decodeBuffer(bytes, bytes.length);
+    }
+
+    public static void getBpgUrl(final String url, final UrlCallback callback) {
+        Log.e("wanglei", "url:" + url);
+        if (BPG.getmContext() == null) {
+            return;
+        }
+        if (BPG.getSingleThreadExecutor() != null) {
+            final Map<String, String> params = new HashMap<>();
+            params.put("app_name", BPG.getmContext().getPackageName());
+            params.put("app_key", BPG.getToken());
+            params.put("image", url);
+            BPG.getSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    String response = HttpUtils.sendPostData("http://testbpg.mkzcdn.com/sdk/bpg/image", params, "utf-8");
+                    Log.e("wanglei", "response origin url:" + url);
+                    Log.e("wanglei", "response:" + response);
+                    if (callback != null) {
+                        callback.onUrlReceive(response);
+                    }
+                }
+            });
+        }
     }
 }

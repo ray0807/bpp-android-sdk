@@ -59,4 +59,5 @@
 }
 
 -keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
+-keep class com.xmtj.bpgdecoder.iInterface.UrlCallback{ *;}
 
