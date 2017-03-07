@@ -14,6 +14,8 @@ import java.io.InputStream;
  */
 
 public class ByteTools {
+
+
     protected static byte[] toByteArray(InputStream input) throws IOException {
         byte[] countByte = new byte[1];
         long id = 0;
@@ -70,6 +72,7 @@ public class ByteTools {
         }
         return output.toByteArray();
     }
+
 
     private static synchronized void saveIds(long key) {
         if (null != BPG.getmDBHelper()) {
