@@ -18,8 +18,8 @@ extern void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOu
 static nhr_request test_post_request = NULL;
 static int test_post_error = 0;
 static nhr_bool test_post_working = 0;
-static const char *test_get_param_name1 = "test_get_param_name1";
-static const char *test_get_param_value1 = "test_get_param_value1";
+//static const char *test_get_param_name1 = "test_get_param_name1";
+//static const char *test_get_param_value1 = "test_get_param_value1";
 
 static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 {
@@ -30,22 +30,25 @@ static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 
 static int test_post_parse_body(const char *body, unsigned long test_number)
 {
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
     cJSON *json = cJSON_ParseWithOpts(body, NULL, 0);
-    cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
-    cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
-    cJSON *param1 = args ? cJSON_GetObjectItem(args, test_get_param_name1) : NULL;
-    cJSON *deflated = json ? cJSON_GetObjectItem(json, "deflated") : NULL;
-    cJSON *gzipped = json ? cJSON_GetObjectItem(json, "gzipped") : NULL;
+    // cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
+    // cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
+    // cJSON *param1 = args ? cJSON_GetObjectItem(args, test_get_param_name1) : NULL;
+    // cJSON *deflated = json ? cJSON_GetObjectItem(json, "deflated") : NULL;
+    // cJSON *gzipped = json ? cJSON_GetObjectItem(json, "gzipped") : NULL;
 
-    cJSON *host = headers ? cJSON_GetObjectItem(headers, "Host") : NULL;
+    // cJSON *host = headers ? cJSON_GetObjectItem(headers, "Host") : NULL;
 
-    __android_log_print(ANDROID_LOG_INFO, TAG, "test_post_parse_body body: %s", body);
-    if (host)
+    cJSON *errorCodeJson = json ? cJSON_GetObjectItem(json, "error") : NULL;
+    cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
+    int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", messageJson->valuestring);
+    if (errorCode == 0)
     {
-        __android_log_print(ANDROID_LOG_INFO, TAG, "test_post_parse_body host: %s", host->valuestring);
+        isVertify = JNI_TRUE;
     }
-
-    return 12;
+    return errorCode;
 }
 
 static void test_post_log_body(const char *body, const unsigned int body_len)
@@ -66,17 +69,12 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
     unsigned long test_number = (unsigned long)nhr_request_get_user_object(request);
     test_post_error = 1;
 
-    __android_log_print(ANDROID_LOG_INFO, TAG, "\nResponce #%lu:\n", test_number);
     //	test_post_log_body(body, body_len);
     if (test_number == 0)
     {
         test_post_error = 10;
         test_post_working = nhr_false;
         return;
-    }
-    if (test_number == 1)
-    {
-        isVertify = JNI_TRUE;
     }
 
     if (nhr_response_get_status_code(responce) != 200)
@@ -98,7 +96,7 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
     test_post_working = nhr_false;
 }
 
-static int test_post_number(unsigned long number)
+static int test_post_number(unsigned long number, char *packageName, char *token)
 {
 
     if (test_post_working)
@@ -110,7 +108,7 @@ static int test_post_number(unsigned long number)
 
     test_post_request = nhr_request_create();
 
-    nhr_request_set_url(test_post_request, "http", "httpbin.org", "/post", 80);
+    nhr_request_set_url(test_post_request, "http", "testbpg.mkzcdn.com", "/sdk/index/check", 80);
 
     nhr_request_set_method(test_post_request, nhr_method_POST);
     nhr_request_set_timeout(test_post_request, 10);
@@ -122,6 +120,9 @@ static int test_post_number(unsigned long number)
     nhr_request_add_header_field(test_post_request, "Accept", "application/json");
     nhr_request_add_header_field(test_post_request, "Connection", "close");
     nhr_request_add_header_field(test_post_request, "User-Agent", "CMake tests");
+
+    nhr_request_add_parameter(test_post_request, "app_name", packageName);
+    nhr_request_add_parameter(test_post_request, "app_key", token);
 
     nhr_request_set_on_recvd_responce(test_post_request, &test_post_on_response);
     nhr_request_set_on_error(test_post_request, &test_post_on_error);
@@ -151,10 +152,10 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     else
     {
         __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = false");
-        test_post_number(1);
+        test_post_number(1, (*env)->GetStringUTFChars(env, packageName, NULL), (*env)->GetStringUTFChars(env, token, NULL));
     }
-    //        __android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s" ,(*env)->GetStringUTFChars(env, packageName, NULL));
-    //        __android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s" ,(*env)->GetStringUTFChars(env, token, NULL));
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize(JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize)
