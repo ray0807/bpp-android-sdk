@@ -7,8 +7,17 @@ import android.database.Cursor;
 import android.os.Debug;
 import android.util.Log;
 
+import com.xmtj.bpgdecoder.Utils.HttpUtils;
 import com.xmtj.bpgdecoder.db.DBHelperManager;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,10 +75,8 @@ public class BPG {
                 @Override
                 public void run() {
                     Log.i(BPG_TAG, "bpg start init");
-                    Log.i(BPG_TAG, "packageName:" + mContext.getPackageName());
-                    Log.i(BPG_TAG, "token:" + token);
                     DecoderWrapper.init(mContext.getPackageName(), token);
-                    uploadAll();
+                    uploadAll(mContext.getPackageName(), token);
                 }
 
 
@@ -81,20 +88,31 @@ public class BPG {
     }
 
 
-    private static void uploadAll() {
+    private static void uploadAll(String packageName, String token) {
         if (null != mDBhelperManager) {
             Cursor queryCursor = null;
             try {
                 mDBhelperManager.open();
                 queryCursor = mDBhelperManager.getAllBpgCount();
+                List<Map<String, Long>> data = new ArrayList<>();
                 if (queryCursor != null) {
+
                     while (queryCursor.moveToNext()) {
-                        String bpg_key = queryCursor.getString(0);//获取第二列的值
+                        long bpg_key = queryCursor.getLong(0);//获取第二列的值
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
                         Log.e(BPG_TAG, "bpg_key:" + bpg_key);
                         Log.e(BPG_TAG, "count:" + count);
-
+                        Map<String, Long> m = new HashMap<>();
+                        m.put("id", bpg_key);
+                        m.put("count", (long) count);
+                        data.add(m);
                     }
+                    JSONArray jsonArray = new JSONArray(data);
+                    Map<String, String> params = new HashMap<>();
+                    params.put("data", jsonArray.toString());
+                    params.put("app_name", packageName);
+                    params.put("app_key", token);
+                    HttpUtils.sendPostData("http://testbpg.mkzcdn.com/sdk/index/dec_count", params, "utf-8");
                     mDBhelperManager.removeAllBpgCount();
                 }
 
