@@ -80,8 +80,14 @@ public class BPG {
                 @Override
                 public void run() {
                     Log.i(BPG_TAG, "bpg start init");
-                    DecoderWrapper.init(mContext.getPackageName(), token);
-                    uploadAll(mContext.getPackageName(), token);
+                    try {
+                        DecoderWrapper.init(mContext.getPackageName(), token);
+                        uploadAll(mContext.getPackageName(), token);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(BPG_TAG, "bpg init failed");
+                    }
+
                 }
 
 
@@ -101,7 +107,6 @@ public class BPG {
                 queryCursor = mDBhelperManager.getAllBpgCount();
                 List<Map<String, Long>> data = new ArrayList<>();
                 if (queryCursor != null) {
-
                     while (queryCursor.moveToNext()) {
                         long bpg_key = queryCursor.getLong(0);//获取第二列的值
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
