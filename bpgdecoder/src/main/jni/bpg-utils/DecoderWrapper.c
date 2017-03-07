@@ -28,9 +28,9 @@ static void test_post_on_error(nhr_request request, nhr_error_code error_code)
     test_post_working = nhr_false;
 }
 
-static int test_post_parse_body(const char *body, unsigned long test_number)
+static int test_post_parse_body(const char *body)
 {
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
+    //__android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
     cJSON *json = cJSON_ParseWithOpts(body, NULL, 0);
     // cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
     // cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
@@ -43,7 +43,7 @@ static int test_post_parse_body(const char *body, unsigned long test_number)
     cJSON *errorCodeJson = json ? cJSON_GetObjectItem(json, "error") : NULL;
     cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
     int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", messageJson->valuestring);
+    __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
     if (errorCode == 0)
     {
         isVertify = JNI_TRUE;
@@ -66,16 +66,16 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
 {
     char *body = nhr_response_get_body(responce);
     unsigned int body_len = nhr_response_get_body_length(responce);
-    unsigned long test_number = (unsigned long)nhr_request_get_user_object(request);
+    // unsigned long test_number = (unsigned long)nhr_request_get_user_object(request);
     test_post_error = 1;
 
     //	test_post_log_body(body, body_len);
-    if (test_number == 0)
-    {
-        test_post_error = 10;
-        test_post_working = nhr_false;
-        return;
-    }
+    // if (test_number == 0)
+    // {
+    //     test_post_error = 10;
+    //     test_post_working = nhr_false;
+    //     return;
+    // }
 
     if (nhr_response_get_status_code(responce) != 200)
     {
@@ -86,7 +86,7 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
 
     if (body && body_len)
     {
-        test_post_error = test_post_parse_body(body, test_number);
+        test_post_error = test_post_parse_body(body);
     }
     else
     {
@@ -96,7 +96,7 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
     test_post_working = nhr_false;
 }
 
-static int test_post_number(unsigned long number, char *packageName, char *token)
+static int test_post_number(const char *packageName,const char *token)
 {
 
     if (test_post_working)
@@ -113,7 +113,7 @@ static int test_post_number(unsigned long number, char *packageName, char *token
     nhr_request_set_method(test_post_request, nhr_method_POST);
     nhr_request_set_timeout(test_post_request, 10);
 
-    nhr_request_set_user_object(test_post_request, (void *)number);
+    // nhr_request_set_user_object(test_post_request, (void *)number);
 
     nhr_request_add_header_field(test_post_request, "Cache-control", "no-cache");
     nhr_request_add_header_field(test_post_request, "Accept-Charset", "utf-8");
@@ -145,17 +145,17 @@ static int test_post_number(unsigned long number, char *packageName, char *token
 
 JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token)
 {
-    if (isVertify)
-    {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = true");
-    }
-    else
-    {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = false");
-        test_post_number(1, (*env)->GetStringUTFChars(env, packageName, NULL), (*env)->GetStringUTFChars(env, token, NULL));
-    }
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
+    //if (isVertify)
+    //{
+    //  __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = true");
+    //}
+    //else
+    //{
+    //  __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = false");
+    //}
+    test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), (*env)->GetStringUTFChars(env, token, NULL));
+    //__android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
+    //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize(JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize)
