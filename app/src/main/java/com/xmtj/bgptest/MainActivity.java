@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         ImageLoader.getInstance().stop();
-
         super.onBackPressed();
     }
 

@@ -44,8 +44,9 @@ public class App extends Application {
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();
         config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+//        config.imageDecoder(new BpgImageDecoder(true));
         config.imageDownloader(new OkHttpImageDownloader(context, new OkHttpClient()));
-        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+        config.diskCacheSize(500 * 1024 * 1024); // 50 MiB
         config.tasksProcessingOrder(QueueProcessingType.FIFO);
         config.writeDebugLogs(); // Remove for release app
 

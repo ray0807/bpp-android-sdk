@@ -93,6 +93,7 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
                 return new ByteArrayInputStream(decBuffer);
             } catch (Exception e) {
                 e.printStackTrace();
+                return new ContentLengthInputStream(inputStream, contentLength);
             }
         }
         return new ContentLengthInputStream(inputStream, contentLength);
