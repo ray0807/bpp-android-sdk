@@ -58,7 +58,7 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
         try {
             token = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(),
-                            PackageManager.GET_META_DATA).metaData.getString("BPG_TOKEN");
+                            PackageManager.GET_META_DATA).metaData.getString(Constants.METADATE_TAG);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

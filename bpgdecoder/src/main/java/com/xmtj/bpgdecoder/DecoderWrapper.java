@@ -4,6 +4,8 @@ package com.xmtj.bpgdecoder;
 import android.util.Log;
 
 
+import com.xmtj.bpgdecoder.constant.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,7 +24,7 @@ public class DecoderWrapper {
         try {
             bytes = ByteTools.toByteArray(input);
             if (null == bytes) {
-                Log.e(BPG.BPG_TAG, "InputStream format byte failed,please check your image source");
+                Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
                 return null;
             }
         } catch (IOException e) {

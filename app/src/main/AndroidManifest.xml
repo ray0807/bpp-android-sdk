@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -24,8 +25,8 @@
         <activity android:name=".activity.ComicViewAcitivity" />
 
         <meta-data
-            android:name="BPG_TOKEN"
-            android:value="${BPG_TOKEN}" />
+            android:name="XMTJ_DECODER_TOKEN"
+            android:value="${XMTJ_DECODER_TOKEN}" />
     </application>
 
 </manifest>
