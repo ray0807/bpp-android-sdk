@@ -16,6 +16,7 @@
 package com.xmtj.bgptest.downloader;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.xmtj.bpgdecoder.BPG;
@@ -46,38 +47,50 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
 
     private OkHttpClient client;
     private Context context;
+    private String packageName;
+    private String token;
 
     public OkHttpImageDownloader(Context context, OkHttpClient client) {
         super(context);
         this.client = client;
         this.context = context;
+        packageName = context.getPackageName();
+        try {
+            token = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(),
+                            PackageManager.GET_META_DATA).metaData.getString("BPG_TOKEN");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
-
-        RequestBody requestBody = new FormBody.Builder().add("app_name", BPG.getPackageName()).add("app_key", BPG.getToken()).add("image", imageUri).build();
-
+        RequestBody requestBody = new FormBody.Builder()
+                .add("app_name", packageName)
+                .add("app_key", token)
+                .add("image", imageUri)
+                .build();
         Request request = new Request.Builder().url(Constants.GET_SMALLER_IAMGE_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
 
         ResponseBody responseBody = response.body();
         InputStream inputStream = responseBody.byteStream();
         int contentLength = (int) responseBody.contentLength();
-
-        Log.e("wanglei", "Content-Type:" + response.headers().get("Content-Type"));
         if (Constants.RESOURCE_TAG.equals(response.headers().get("Content-Type"))) {
-            //bpg处理
+            //特殊处理
             InputStream stream = null;
             try {
                 stream = new ContentLengthInputStream(inputStream, contentLength);
                 byte[] decBuffer = DecoderWrapper.decodeBpgBuffer(stream);
+                //解码器注册失败重新注册
+                if (null != stream && null == decBuffer && !DecoderWrapper.getInitState()) {
+                    BPG.init(context);
+                    return new ContentLengthInputStream(inputStream, contentLength);
+                }
                 return new ByteArrayInputStream(decBuffer);
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                if (null != stream)
-                    IoUtils.closeSilently(stream);
             }
         }
         return new ContentLengthInputStream(inputStream, contentLength);

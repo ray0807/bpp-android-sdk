@@ -37,13 +37,10 @@ public class BPG {
         System.loadLibrary("bpg_decoder");
     }
 
-    public static String getToken() {
+    protected static String getToken() {
         return null == token ? "" : token;
     }
 
-    public static String getPackageName() {
-        return null == packageName ? "" : packageName;
-    }
 
     private static ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private static Context mContext;
@@ -140,16 +137,6 @@ public class BPG {
                     mDBhelperManager.close();
                 }
             }
-        }
-    }
-
-    /**
-     * 重新注册
-     */
-    protected static void reInit() {
-        //解码器注册失败重新注册
-        if (null != mContext && !DecoderWrapper.getInitState()) {
-            init(mContext);
         }
     }
 
