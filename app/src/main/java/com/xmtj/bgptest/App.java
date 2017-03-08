@@ -4,13 +4,14 @@ import android.app.Application;
 import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.okhttp.OkHttpClient;
 import com.xmtj.bgptest.downloader.OkHttpImageDownloader;
 import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.cache.disc.naming.Md5FileNameGenerator;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.ImageLoaderConfiguration;
 import com.xmtj.imagedownloader.core.assist.QueueProcessingType;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by wanglei on 08/02/17.

@@ -22,7 +22,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.cache.disc.DiskCache;
 import com.xmtj.imagedownloader.cache.memory.MemoryCache;
 import com.xmtj.imagedownloader.core.assist.ImageSize;

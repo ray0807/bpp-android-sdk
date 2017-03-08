@@ -1,6 +1,5 @@
 package com.xmtj.bpgdecoder.Utils;
 
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

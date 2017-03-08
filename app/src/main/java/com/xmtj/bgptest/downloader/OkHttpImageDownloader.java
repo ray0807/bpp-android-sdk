@@ -18,15 +18,9 @@ package com.xmtj.bgptest.downloader;
 import android.content.Context;
 import android.util.Log;
 
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-import com.xmtj.bgptest.App;
 import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.bpgdecoder.DecoderWrapper;
+import com.xmtj.bpgdecoder.constant.Constants;
 import com.xmtj.imagedownloader.core.assist.ContentLengthInputStream;
 import com.xmtj.imagedownloader.core.download.BaseImageDownloader;
 import com.xmtj.imagedownloader.utils.IoUtils;
@@ -34,6 +28,13 @@ import com.xmtj.imagedownloader.utils.IoUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Implementation of ImageDownloader which uses {@link OkHttpClient} for image stream retrieving.
@@ -55,26 +56,29 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
 
+        RequestBody requestBody = new FormBody.Builder().add("app_name", BPG.getPackageName()).add("app_key", BPG.getToken()).add("image", imageUri).build();
 
-        Request request = new Request.Builder().url(imageUri).build();
+        Request request = new Request.Builder().url(Constants.GET_SMALLER_IAMGE_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
 
-        Log.e("wanglei", "headers:" + response.headers().names());
         ResponseBody responseBody = response.body();
         InputStream inputStream = responseBody.byteStream();
         int contentLength = (int) responseBody.contentLength();
 
-        //bpg处理
-        InputStream stream = null;
-        try {
-            stream = new ContentLengthInputStream(inputStream, contentLength);
-            byte[] decBuffer = DecoderWrapper.decodeBpgBuffer(stream);
-            return new ByteArrayInputStream(decBuffer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != stream)
-                IoUtils.closeSilently(stream);
+        Log.e("wanglei", "Content-Type:" + response.headers().get("Content-Type"));
+        if (Constants.RESOURCE_TAG.equals(response.headers().get("Content-Type"))) {
+            //bpg处理
+            InputStream stream = null;
+            try {
+                stream = new ContentLengthInputStream(inputStream, contentLength);
+                byte[] decBuffer = DecoderWrapper.decodeBpgBuffer(stream);
+                return new ByteArrayInputStream(decBuffer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (null != stream)
+                    IoUtils.closeSilently(stream);
+            }
         }
         return new ContentLengthInputStream(inputStream, contentLength);
     }

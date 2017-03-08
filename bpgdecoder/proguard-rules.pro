@@ -56,8 +56,11 @@
 -keepclasseswithmembers public class com.xmtj.bpgdecoder.BPG {
     public static void init(android.content.Context);
     public static void destory();
+    public static String getToken();
+    public static String getPackageName();
 }
 
 -keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
 -keep class com.xmtj.bpgdecoder.iInterface.UrlCallback{ *;}
+-keep class com.xmtj.bpgdecoder.constant.Constants{ *;}
 

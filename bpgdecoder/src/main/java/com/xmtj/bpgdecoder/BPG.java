@@ -30,6 +30,7 @@ public class BPG {
 
     public static final String BPG_TAG = "xmtj_bpgdecoder";
     private static String token;
+    private static String packageName;
 
     // Load library
     static {
@@ -37,7 +38,11 @@ public class BPG {
     }
 
     public static String getToken() {
-        return token;
+        return null == token ? "" : token;
+    }
+
+    public static String getPackageName() {
+        return null == packageName ? "" : packageName;
     }
 
     private static ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
@@ -76,13 +81,14 @@ public class BPG {
                     .getApplicationInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA);
             token = appInfo.metaData.getString("BPG_TOKEN");
+            packageName = mContext.getPackageName();
             singleThreadExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
                     Log.i(BPG_TAG, "bpg start init");
                     try {
-                        DecoderWrapper.init(mContext.getPackageName(), token);
-                        uploadAll(mContext.getPackageName(), token);
+                        DecoderWrapper.init(packageName, token);
+                        uploadAll(packageName, token);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e(BPG_TAG, "bpg init failed");
@@ -142,7 +148,7 @@ public class BPG {
      */
     protected static void reInit() {
         //解码器注册失败重新注册
-        if (null != mContext && DecoderWrapper.getInitState()) {
+        if (null != mContext && !DecoderWrapper.getInitState()) {
             init(mContext);
         }
     }

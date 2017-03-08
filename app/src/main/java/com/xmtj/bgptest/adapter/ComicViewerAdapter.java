@@ -14,12 +14,8 @@ import android.widget.ImageView;
 
 import com.xmtj.bgptest.Constant;
 import com.xmtj.bgptest.R;
-import com.xmtj.bgptest.activity.ComicViewAcitivity;
 import com.xmtj.bgptest.utils.DisplayUtil;
 import com.xmtj.bgptest.utils.ViewHolder;
-import com.xmtj.bpgdecoder.BPG;
-import com.xmtj.bpgdecoder.DecoderWrapper;
-import com.xmtj.bpgdecoder.iInterface.UrlCallback;
 import com.xmtj.imagedownloader.core.DisplayImageOptions;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.assist.FailReason;
