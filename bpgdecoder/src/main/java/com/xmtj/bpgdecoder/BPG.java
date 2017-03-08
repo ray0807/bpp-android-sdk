@@ -187,14 +187,21 @@ public class BPG {
 //                            // connected to the mobile provider's data plan
 //                            Log.i(BPG_TAG, "当前移动网络连接可用 ");
 //                        }
-                        if (!DecoderWrapper.getInitState() && null != packageName && null != token) {
-                            try {
-                                Log.e(BPG_TAG, Constants.DECODER_REINIT);
-                                DecoderWrapper.init(packageName, token);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e(BPG_TAG, Constants.DECODER_INIT_FAILED);
-                            }
+                        if (!DecoderWrapper.getInitState() && null != packageName && null != token && null != singleThreadExecutor) {
+                            singleThreadExecutor.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Log.e(BPG_TAG, Constants.DECODER_REINIT);
+                                        DecoderWrapper.init(packageName, token);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Log.e(BPG_TAG, Constants.DECODER_INIT_FAILED);
+                                    }
+                                }
+
+
+                            });
                         }
                     } else {
                         Log.e(BPG_TAG, Constants.NETWORK_DISCONNET);
