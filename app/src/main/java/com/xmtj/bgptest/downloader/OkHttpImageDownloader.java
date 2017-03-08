@@ -18,8 +18,10 @@ package com.xmtj.bgptest.downloader;
 import android.content.Context;
 import android.util.Log;
 
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 import com.xmtj.bgptest.App;
@@ -52,6 +54,8 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
 
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+
+
         Request request = new Request.Builder().url(imageUri).build();
         Response response = client.newCall(request).execute();
 
