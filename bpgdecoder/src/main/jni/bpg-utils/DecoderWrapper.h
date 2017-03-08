@@ -25,7 +25,7 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
         (JNIEnv *, jclass, jstring, jstring);
 
 JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState
-        (JNIEnv *, jclass, jstring, jstring);
+        (JNIEnv *, jclass);
 
 
 

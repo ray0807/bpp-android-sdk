@@ -11,7 +11,6 @@ import com.xmtj.imagedownloader.cache.disc.naming.Md5FileNameGenerator;
 import com.xmtj.imagedownloader.core.ImageLoader;
 import com.xmtj.imagedownloader.core.ImageLoaderConfiguration;
 import com.xmtj.imagedownloader.core.assist.QueueProcessingType;
-import com.xmtj.bgptest.decoder.BpgImageDecoder;
 
 /**
  * Created by wanglei on 08/02/17.
@@ -19,7 +18,6 @@ import com.xmtj.bgptest.decoder.BpgImageDecoder;
 
 public class App extends Application {
 
-    private static Context mContext;
 
     @Override
     public void onCreate() {
@@ -28,12 +26,7 @@ public class App extends Application {
     }
 
 
-    public static Context getMContext() {
-        return mContext;
-    }
-
     public void initImageLoader(Context context) {
-        mContext = context;
         LeakCanary.install(this);
         //注册解码器
         BPG.init(context);
@@ -50,7 +43,6 @@ public class App extends Application {
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();
         config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.imageDecoder(new BpgImageDecoder(true));
         config.imageDownloader(new OkHttpImageDownloader(context, new OkHttpClient()));
         config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
         config.tasksProcessingOrder(QueueProcessingType.FIFO);

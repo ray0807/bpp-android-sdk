@@ -159,7 +159,7 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }
 
-JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState(JNIEnv *env, jclass class, jstring packageName, jstring token)
+JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState(JNIEnv *env, jclass class)
 {
     return isVertify;
 }

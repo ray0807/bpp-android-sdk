@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2011-2015 Sergey Tarasevich
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,13 +16,20 @@
 package com.xmtj.bgptest.downloader;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
+import com.xmtj.bgptest.App;
+import com.xmtj.bpgdecoder.BPG;
+import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.core.assist.ContentLengthInputStream;
 import com.xmtj.imagedownloader.core.download.BaseImageDownloader;
+import com.xmtj.imagedownloader.utils.IoUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,19 +41,37 @@ import java.io.InputStream;
  */
 public class OkHttpImageDownloader extends BaseImageDownloader {
 
-	private OkHttpClient client;
+    private OkHttpClient client;
+    private Context context;
 
-	public OkHttpImageDownloader(Context context, OkHttpClient client) {
-		super(context);
-		this.client = client;
-	}
+    public OkHttpImageDownloader(Context context, OkHttpClient client) {
+        super(context);
+        this.client = client;
+        this.context = context;
+    }
 
-	@Override
-	protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
-		Request request = new Request.Builder().url(imageUri).build();
-		ResponseBody responseBody = client.newCall(request).execute().body();
-		InputStream inputStream = responseBody.byteStream();
-		int contentLength = (int) responseBody.contentLength();
-		return new ContentLengthInputStream(inputStream, contentLength);
-	}
+    @Override
+    protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+        Request request = new Request.Builder().url(imageUri).build();
+        Response response = client.newCall(request).execute();
+
+        Log.e("wanglei", "headers:" + response.headers().names());
+        ResponseBody responseBody = response.body();
+        InputStream inputStream = responseBody.byteStream();
+        int contentLength = (int) responseBody.contentLength();
+
+        //bpg处理
+        InputStream stream = null;
+        try {
+            stream = new ContentLengthInputStream(inputStream, contentLength);
+            byte[] decBuffer = DecoderWrapper.decodeBpgBuffer(stream);
+            return new ByteArrayInputStream(decBuffer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != stream)
+                IoUtils.closeSilently(stream);
+        }
+        return new ContentLengthInputStream(inputStream, contentLength);
+    }
 }

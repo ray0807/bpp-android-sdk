@@ -137,6 +137,16 @@ public class BPG {
         }
     }
 
+    /**
+     * 重新注册
+     */
+    protected static void reInit() {
+        //解码器注册失败重新注册
+        if (null != mContext && DecoderWrapper.getInitState()) {
+            init(mContext);
+        }
+    }
+
 
     public static void destory() {
         mContext = null;
