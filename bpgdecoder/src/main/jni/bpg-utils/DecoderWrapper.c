@@ -30,7 +30,7 @@ static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 
 static int test_post_parse_body(const char *body)
 {
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "request: %s", body);
     cJSON *json = cJSON_ParseWithOpts(body, NULL, 0);
     // cJSON *args = json ? cJSON_GetObjectItem(json, "args") : NULL;
     // cJSON *headers = json ? cJSON_GetObjectItem(json, "headers") : NULL;
@@ -44,7 +44,7 @@ static int test_post_parse_body(const char *body)
     cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
     int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
     __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init errorCode : %d", errorCode);
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init errorCode : %d", errorCode);
     if (errorCode == 0)
     {
         isVertify = JNI_TRUE;

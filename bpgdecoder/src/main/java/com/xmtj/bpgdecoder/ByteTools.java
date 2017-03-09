@@ -60,7 +60,6 @@ public class ByteTools {
         }
         if (id <= 0) {
             Log.e(BPG.BPG_TAG, "Illegal image resource");
-            return null;
         }
 
 

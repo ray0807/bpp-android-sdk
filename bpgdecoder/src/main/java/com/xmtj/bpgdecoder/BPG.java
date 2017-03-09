@@ -63,7 +63,7 @@ public class BPG {
 
 
     protected static ExecutorService getSingleThreadExecutor() {
-        return singleThreadExecutor;
+        return null == singleThreadExecutor ? Executors.newSingleThreadExecutor() : singleThreadExecutor;
     }
 
     /**

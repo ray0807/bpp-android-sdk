@@ -25,10 +25,12 @@ public class DecoderWrapper {
             bytes = ByteTools.toByteArray(input);
             if (null == bytes) {
                 Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
-                return null;
+                return new byte[0];
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
+            return new byte[0];
         }
         return decodeBuffer(bytes, bytes.length);
     }
