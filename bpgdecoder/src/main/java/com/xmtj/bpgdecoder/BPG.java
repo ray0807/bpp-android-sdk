@@ -9,15 +9,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.xmtj.bpgdecoder.Utils.HttpUtils;
 import com.xmtj.bpgdecoder.constant.Constants;
 import com.xmtj.bpgdecoder.db.DBHelperManager;
-import com.xmtj.bpgdecoder.iInterface.UrlCallback;
 
 import org.json.JSONArray;
 
