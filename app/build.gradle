@@ -10,7 +10,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [XMTJ_DECODER_TOKEN: "58be214e45297d20690030c9"]//default online
+        manifestPlaceholders = [XMTJ_DECODER_TOKEN: "8cde40cc171752c85c5e2ebd93d9f1de"]
+//default online
 
     }
     lintOptions {

@@ -5,6 +5,14 @@
 #include <android/log.h>
 #include "libhttp_public.h"
 #include "../http/libnhr.h"
+#include <sys/time.h>
+#include "md5.h"
+long getCurrentTime()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
 
 static jboolean isVertify = JNI_FALSE;
 static unsigned int canUseCount = 20;
@@ -43,7 +51,11 @@ static int test_post_parse_body(const char *body)
     cJSON *errorCodeJson = json ? cJSON_GetObjectItem(json, "error") : NULL;
     cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
     int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
-    __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
+    
+    if (messageJson)
+    {
+        __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
+    }
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init errorCode : %d", errorCode);
     if (errorCode == 0)
     {
@@ -97,7 +109,7 @@ static void test_post_on_response(nhr_request request, nhr_response responce)
     test_post_working = nhr_false;
 }
 
-static int test_post_number(const char *packageName, const char *token)
+static int test_post_number(const char *packageName, const char *token, const char *timestamp)
 {
 
     if (test_post_working)
@@ -124,6 +136,8 @@ static int test_post_number(const char *packageName, const char *token)
 
     nhr_request_add_parameter(test_post_request, "app_name", packageName);
     nhr_request_add_parameter(test_post_request, "app_key", token);
+    nhr_request_add_parameter(test_post_request, "timestamp", timestamp);
+    nhr_request_add_parameter(test_post_request, "app_type", "1");
 
     nhr_request_set_on_recvd_responce(test_post_request, &test_post_on_response);
     nhr_request_set_on_error(test_post_request, &test_post_on_error);
@@ -146,6 +160,30 @@ static int test_post_number(const char *packageName, const char *token)
 
 JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token)
 {
+    long currentTime = getCurrentTime()/1000;
+    
+    char app_key[50]={0};
+    char timestemp[15]={0};
+    sprintf(timestemp,"%ld",currentTime);
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 timestamp : %s", timestemp);
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 token : %s", (*env)->GetStringUTFChars(env, token, NULL));
+    //拼接的待加密字符串，可以根据自身需求修改
+    sprintf(app_key,"%s%s",timestemp,(*env)->GetStringUTFChars(env, token, NULL));
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 app_key : %s", app_key);
+    MD5_CTX context = {0};
+    MD5Init(&context);
+    MD5Update(&context, app_key, strlen(app_key));
+    uint8_t dest[16] = {0};
+    MD5Final(dest, &context);
+    // (*env)->ReleaseStringUTFChars(old);
+
+    int i = 0;
+    char szMd5[32] = {0};
+    for (i = 0; i < 16; i++)
+    {
+        sprintf(szMd5, "%s%02x", szMd5, dest[i]);
+    }
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "after md5 app_key : %s", szMd5);
     //if (isVertify)
     //{
     //  __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = true");
@@ -154,7 +192,7 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     //{
     //  __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = false");
     //}
-    test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), (*env)->GetStringUTFChars(env, token, NULL));
+    test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), szMd5, timestemp);
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }

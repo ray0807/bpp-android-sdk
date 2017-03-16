@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := bpg_decoder
-LOCAL_SRC_FILES := decoder.c DecoderWrapper.c
+LOCAL_SRC_FILES := decoder.c DecoderWrapper.c md5.c
 
 #LOCAL_CFLAGS += 
 
