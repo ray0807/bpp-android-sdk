@@ -64,7 +64,7 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
         InputStream inputStream = responseBody.byteStream();
         int contentLength = (int) responseBody.contentLength();
 
-        if (Constants.RESOURCE_TAG.equals(response.headers().get("Content-Type"))) {
+        if (Constants.RESOURCE_TAG.equals(response.request().url().host())) {
             //特殊处理
             InputStream stream = null;
             try {

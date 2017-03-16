@@ -137,17 +137,19 @@ public class BPG {
                         m.put("count", (long) count);
                         data.add(m);
                     }
-                    JSONArray jsonArray = new JSONArray(data);
-                    Map<String, String> params = new HashMap<>();
-                    String timestamp = System.currentTimeMillis() / 1000 + "";
-                    String app_key = MD5.md5(timestamp + token, "utf-8");
-                    params.put("data", jsonArray.toString());
-                    params.put("app_name", packageName);
-                    params.put("app_key", app_key);
-                    params.put("app_type", "1");
-                    params.put("timestamp", timestamp);
-                    Log.e("wanglei", HttpUtils.sendPostData(Constants.POST_COUNT_URL, params, "utf-8"));
-                    mDBhelperManager.removeAllBpgCount();
+                    if (data.size() > 0) {
+                        JSONArray jsonArray = new JSONArray(data);
+                        Map<String, String> params = new HashMap<>();
+                        String timestamp = System.currentTimeMillis() / 1000 + "";
+                        String app_key = MD5.md5(timestamp + token, "utf-8");
+                        params.put("data", jsonArray.toString());
+                        params.put("app_name", packageName);
+                        params.put("app_key", app_key);
+                        params.put("app_type", "1");
+                        params.put("timestamp", timestamp);
+                        HttpUtils.sendPostData(Constants.POST_COUNT_URL, params, "utf-8");
+                        mDBhelperManager.removeAllBpgCount();
+                    }
                 }
 
             } catch (Exception e) {
