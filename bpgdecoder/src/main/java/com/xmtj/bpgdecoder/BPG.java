@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.xmtj.bpgdecoder.Utils.HttpUtils;
+import com.xmtj.bpgdecoder.Utils.MD5;
 import com.xmtj.bpgdecoder.constant.Constants;
 import com.xmtj.bpgdecoder.db.DBHelperManager;
 
@@ -138,10 +139,14 @@ public class BPG {
                     }
                     JSONArray jsonArray = new JSONArray(data);
                     Map<String, String> params = new HashMap<>();
+                    String timestamp = System.currentTimeMillis() / 1000 + "";
+                    String app_key = MD5.md5(timestamp + token, "utf-8");
                     params.put("data", jsonArray.toString());
                     params.put("app_name", packageName);
-                    params.put("app_key", token);
-                    HttpUtils.sendPostData(Constants.POST_COUNT_URL, params, "utf-8");
+                    params.put("app_key", app_key);
+                    params.put("app_type", "1");
+                    params.put("timestamp", timestamp);
+                    Log.e("wanglei", HttpUtils.sendPostData(Constants.POST_COUNT_URL, params, "utf-8"));
                     mDBhelperManager.removeAllBpgCount();
                 }
 
@@ -158,6 +163,9 @@ public class BPG {
         }
     }
 
+    public static String getDecodeString(String timestamp, String token) {
+        return MD5.md5(timestamp + token, "utf-8");
+    }
 
     public static void destory() {
         mContext = null;

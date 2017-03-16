@@ -49,9 +49,12 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
 
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+        String timestamp = System.currentTimeMillis() / 1000 + "";
         RequestBody requestBody = new FormBody.Builder()
                 .add("app_name", packageName)
-                .add("app_key", token)
+                .add("timestamp", timestamp)
+                .add("app_type", "1")
+                .add("app_key", BPG.getDecodeString(timestamp, token))
                 .add("image", imageUri)
                 .build();
         Request request = new Request.Builder().url(Constants.GET_SMALLER_IAMGE_URL).post(requestBody).build();
@@ -60,6 +63,7 @@ public class OkHttpImageDownloader extends BaseImageDownloader {
         ResponseBody responseBody = response.body();
         InputStream inputStream = responseBody.byteStream();
         int contentLength = (int) responseBody.contentLength();
+
         if (Constants.RESOURCE_TAG.equals(response.headers().get("Content-Type"))) {
             //特殊处理
             InputStream stream = null;

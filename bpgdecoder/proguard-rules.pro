@@ -54,8 +54,9 @@
 }
 
 -keepclasseswithmembers public class com.xmtj.bpgdecoder.BPG {
-    public static void init(android.content.Context);
-    public static void destory();
+#    public static void init(android.content.Context);
+#    public static void destory();
+　　public static *;
 }
 
 -keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
