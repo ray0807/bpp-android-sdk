@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DecoderWrapper {
-    protected static native void init(String packageName, String token);
+    protected static native void init(String packageName, String token, String currentTime);
 
     public static native boolean getInitState();
 

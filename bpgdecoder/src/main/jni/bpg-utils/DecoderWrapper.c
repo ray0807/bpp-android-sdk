@@ -5,14 +5,7 @@
 #include <android/log.h>
 #include "libhttp_public.h"
 #include "../http/libnhr.h"
-#include <sys/time.h>
 #include "md5.h"
-long getCurrentTime()
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
-}
 
 static jboolean isVertify = JNI_FALSE;
 static unsigned int canUseCount = 20;
@@ -158,17 +151,15 @@ static int test_post_number(const char *packageName, const char *token, const ch
     return test_post_error;
 }
 
-JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token)
+JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token, jstring currentTime)
 {
-    long currentTime = getCurrentTime()/1000;
+    
     
     char app_key[50]={0};
-    char timestemp[15]={0};
-    sprintf(timestemp,"%ld",currentTime);
-    // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 timestamp : %s", timestemp);
+    // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 timestamp : %s", (*env)->GetStringUTFChars(env, currentTime, NULL));
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 token : %s", (*env)->GetStringUTFChars(env, token, NULL));
     //拼接的待加密字符串，可以根据自身需求修改
-    sprintf(app_key,"%s%s",timestemp,(*env)->GetStringUTFChars(env, token, NULL));
+    sprintf(app_key,"%s%s",(*env)->GetStringUTFChars(env, currentTime, NULL),(*env)->GetStringUTFChars(env, token, NULL));
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 app_key : %s", app_key);
     MD5_CTX context = {0};
     MD5Init(&context);
@@ -192,7 +183,7 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     //{
     //  __android_log_print(ANDROID_LOG_ERROR, TAG, "vertify = false");
     //}
-    test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), szMd5, timestemp);
+    test_post_number((*env)->GetStringUTFChars(env, packageName, NULL), szMd5, (*env)->GetStringUTFChars(env, currentTime, NULL));
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "packageName : %s", (*env)->GetStringUTFChars(env, packageName, NULL));
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }

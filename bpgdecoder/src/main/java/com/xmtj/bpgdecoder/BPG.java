@@ -90,7 +90,7 @@ public class BPG {
                 public void run() {
                     Log.i(BPG_TAG, Constants.DECODER_START_INIT);
                     try {
-                        DecoderWrapper.init(packageName, token);
+                        DecoderWrapper.init(packageName, token, System.currentTimeMillis() / 1000 + "");
                         uploadAll(packageName, token);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -199,7 +199,7 @@ public class BPG {
                                 public void run() {
                                     try {
                                         Log.e(BPG_TAG, Constants.DECODER_REINIT);
-                                        DecoderWrapper.init(packageName, token);
+                                        DecoderWrapper.init(packageName, token, System.currentTimeMillis() / 1000 + "");
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Log.e(BPG_TAG, Constants.DECODER_INIT_FAILED);
