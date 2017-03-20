@@ -44,7 +44,7 @@ static int test_post_parse_body(const char *body)
     cJSON *errorCodeJson = json ? cJSON_GetObjectItem(json, "error") : NULL;
     cJSON *messageJson = json ? cJSON_GetObjectItem(json, "message") : NULL;
     int errorCode = errorCodeJson ? errorCodeJson->valueint : -1;
-    
+
     if (messageJson)
     {
         __android_log_print(ANDROID_LOG_ERROR, TAG, "bpg init : %s", messageJson->valuestring);
@@ -153,13 +153,12 @@ static int test_post_number(const char *packageName, const char *token, const ch
 
 JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token, jstring currentTime)
 {
-    
-    
-    char app_key[50]={0};
+
+    char app_key[100] = {0};
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 timestamp : %s", (*env)->GetStringUTFChars(env, currentTime, NULL));
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 token : %s", (*env)->GetStringUTFChars(env, token, NULL));
     //拼接的待加密字符串，可以根据自身需求修改
-    sprintf(app_key,"%s%s",(*env)->GetStringUTFChars(env, currentTime, NULL),(*env)->GetStringUTFChars(env, token, NULL));
+    sprintf(app_key, "%s%s", (*env)->GetStringUTFChars(env, currentTime, NULL), (*env)->GetStringUTFChars(env, token, NULL));
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 app_key : %s", app_key);
     MD5_CTX context = {0};
     MD5Init(&context);

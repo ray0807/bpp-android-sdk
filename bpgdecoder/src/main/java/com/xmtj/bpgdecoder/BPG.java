@@ -35,6 +35,7 @@ public class BPG {
     public static final String BPG_TAG = "xmtj_bpgdecoder";
     private static String token;
     private static String packageName;
+    protected static int MAX_MEMORY_LIMITED = 100;//100M以后不经过bgp处理,因为可能出现oom
 
     // Load library
     static {
@@ -64,10 +65,14 @@ public class BPG {
     }
 
     /**
-     * application context
-     *
-     * @param context
+     * @param context        application context
+     * @param maxMemoryInUse 当手机内存小于maxMemoryInUse将不会解码
      */
+    public static void init(Context context, int maxMemoryInUse) {
+        MAX_MEMORY_LIMITED = maxMemoryInUse;
+        init(context);
+    }
+
     public static void init(Context context) {
         if (null == context) {
             throw new RuntimeException(Constants.RUNTIME_TAG);
@@ -180,12 +185,13 @@ public class BPG {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                ConnectivityManager manager = (ConnectivityManager) context
-                        .getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
-                if (activeNetwork != null) { // connected to the internet
-                    if (activeNetwork.isConnected()) {
+            try {
+                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                    ConnectivityManager manager = (ConnectivityManager) context
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
+                    if (activeNetwork != null) { // connected to the internet
+                        if (activeNetwork.isConnected()) {
 //                        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
 //                            // connected to wifi
 //                            Log.i(BPG_TAG, "当前WiFi连接可用 ");
@@ -193,29 +199,32 @@ public class BPG {
 //                            // connected to the mobile provider's data plan
 //                            Log.i(BPG_TAG, "当前移动网络连接可用 ");
 //                        }
-                        if (!DecoderWrapper.getInitState() && null != packageName && null != token && null != singleThreadExecutor) {
-                            singleThreadExecutor.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Log.e(BPG_TAG, Constants.DECODER_REINIT);
-                                        DecoderWrapper.init(packageName, token, System.currentTimeMillis() / 1000 + "");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Log.e(BPG_TAG, Constants.DECODER_INIT_FAILED);
+                            if (!DecoderWrapper.getInitState() && null != packageName && null != token && null != singleThreadExecutor) {
+                                singleThreadExecutor.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Log.e(BPG_TAG, Constants.DECODER_REINIT);
+                                            DecoderWrapper.init(packageName, token, System.currentTimeMillis() / 1000 + "");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Log.e(BPG_TAG, Constants.DECODER_INIT_FAILED);
+                                        }
                                     }
-                                }
 
 
-                            });
+                                });
+                            }
+                        } else {
+                            Log.e(BPG_TAG, Constants.NETWORK_DISCONNET);
                         }
-                    } else {
+                    } else {   // not connected to the internet
                         Log.e(BPG_TAG, Constants.NETWORK_DISCONNET);
-                    }
-                } else {   // not connected to the internet
-                    Log.e(BPG_TAG, Constants.NETWORK_DISCONNET);
 
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
 
