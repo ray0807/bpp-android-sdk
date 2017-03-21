@@ -38,7 +38,6 @@ public class MemoryUtils {
             if (_readProclines != null) {
                 _readProclines.invoke(null, arglist);
                 for (int i = 0; i < mMemInfoSizes.length; i++) {
-                    Log.d("GetFreeMem", mMemInfoFields[i] + " : " + mMemInfoSizes[i] / 1024);
                     if (mMemInfoFields[i] != null && mMemInfoFields[i].contains("MemFree")) {
                         return mMemInfoSizes[i] / 1024;
                     }

@@ -35,11 +35,19 @@ public class BPG {
     public static final String BPG_TAG = "xmtj_bpgdecoder";
     private static String token;
     private static String packageName;
-    protected static int MAX_MEMORY_LIMITED = 100;//100M以后不经过bgp处理,因为可能出现oom
+    protected static int MAX_MEMORY_LIMITED = 50;//100M以后不经过bgp处理,因为可能出现oom
+
+    private static boolean isLoadLibrarySuccess = true;
 
     // Load library
     static {
-        System.loadLibrary("bpg_decoder");
+        try {
+            System.loadLibrary("bpg_decoder");
+
+        } catch (Exception e) {
+            isLoadLibrarySuccess = false;
+            e.printStackTrace();
+        }
     }
 
     protected static String getToken() {
@@ -74,8 +82,13 @@ public class BPG {
     }
 
     public static void init(Context context) {
+        if (!isLoadLibrarySuccess) {
+            Log.e(BPG_TAG, "load library failed");
+            return;
+        }
         if (null == context) {
-            throw new RuntimeException(Constants.RUNTIME_TAG);
+            Log.e(BPG_TAG, Constants.RUNTIME_TAG);
+            return;
         }
         mContext = context;
         if (null == mDBhelperManager) {

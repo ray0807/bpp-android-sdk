@@ -189,8 +189,11 @@ static void bmp_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
 
         bufferIncrement += size_of_line;
     }
-    if (NULL != rgb_line)
+    if (rgb_line)
+    {
         free(rgb_line);
+        rgb_line = NULL;
+    }
 }
 
 int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize)

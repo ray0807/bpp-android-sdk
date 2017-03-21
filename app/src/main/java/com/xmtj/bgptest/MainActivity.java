@@ -2,6 +2,7 @@ package com.xmtj.bgptest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,9 @@ import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.core.ImageLoader;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private String test = "http://oss.mkzcdn.com/image/20170101/5864c89edb375-600x800.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ComicViewAcitivity.start(MainActivity.this, ComicViewAcitivity.JPG_VIEWER);
-
+                getWidthAndHeight(test);
             }
         });
 
@@ -93,5 +97,25 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+
+
+    private int[] getWidthAndHeight(String originUrl) {
+        int[] widthAndHeight = new int[2];
+        try {
+            if (originUrl != null) {
+                int index1 = originUrl.indexOf("-");
+                int index2 = originUrl.indexOf(".jpg");
+                String wh = originUrl.substring(index1 + 1, index2);
+                String[] whs = wh.split("x");
+                widthAndHeight[0] = Integer.parseInt(whs[0].replace("x", ""));
+                widthAndHeight[1] = Integer.parseInt(whs[1].replace("x", ""));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return widthAndHeight;
     }
 }
