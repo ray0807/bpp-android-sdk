@@ -242,6 +242,11 @@ JNIEXPORT jbyteArray JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBuffe
                 (*env)->SetByteArrayRegion(env, decBuffer, 0, outBufSize, outBuf);
             }
             (*env)->ReleaseByteArrayElements(env, encBuffer, cEncArray, JNI_ABORT);
+            if (outBuf)
+            {
+                free(outBuf);
+                outBuf = NULL;
+            }
         }
         return decBuffer;
     }
