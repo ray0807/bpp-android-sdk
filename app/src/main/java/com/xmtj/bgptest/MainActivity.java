@@ -1,5 +1,6 @@
 package com.xmtj.bgptest;
 
+import android.app.ActivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ComicViewAcitivity.start(MainActivity.this, ComicViewAcitivity.BPG_VIEWER);
+                displayBriefMemory();
 
             }
         });
@@ -117,5 +119,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         return widthAndHeight;
+    }
+
+    private void displayBriefMemory() {
+
+        final ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
+
+        activityManager.getMemoryInfo(info);
+
+        Log.i("wanglei", "系统剩余内存:" + (info.availMem >> 10) + "k");
+
+        Log.i("wanglei", "系统是否处于低内存运行：" + info.lowMemory);
+
+        Log.i("wanglei", "当系统剩余内存低于" + info.threshold + "时就看成低内存运行");
+
     }
 }

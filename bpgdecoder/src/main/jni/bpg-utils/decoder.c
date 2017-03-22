@@ -10,6 +10,10 @@
 #include "libbpg.h"
 #include <android/log.h>
 
+#include <pthread.h>
+
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
 static const char *TAG = "xmtj_bpgdecoder";
 
 static void ppm_save_to_file(BPGDecoderContext *img, const char *filename)
@@ -48,6 +52,7 @@ static void ppm_save_to_file(BPGDecoderContext *img, const char *filename)
 
 static void ppm_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigned int *outBufLen)
 {
+
     BPGImageInfo img_info_s, *img_info = &img_info_s;
     int w, h, y, size_of_line, size_of_header, bufferIncrement;
     uint8_t *rgb_line;
@@ -63,6 +68,7 @@ static void ppm_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
     if (NULL == rgb_line)
     {
         printf("FAILED to allocate \n");
+        rgb_line = NULL;
         return;
     }
 
@@ -72,7 +78,11 @@ static void ppm_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
     if (NULL == *outBuf)
     {
         printf("FAILED to allocate \n");
-        free(rgb_line);
+        if (NULL != rgb_line)
+        {
+            free(rgb_line);
+            rgb_line = NULL;
+        }
         return;
     }
     //copy the header first
@@ -87,7 +97,11 @@ static void ppm_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
         memcpy((*outBuf) + size_of_header + bufferIncrement, rgb_line, size_of_line);
         bufferIncrement += size_of_line;
     }
-    free(rgb_line);
+    if (NULL != rgb_line)
+    {
+        free(rgb_line);
+        rgb_line = NULL;
+    }
 }
 
 #pragma pack(1) // ensure structure is packed
@@ -118,6 +132,7 @@ typedef struct
 
 static void bmp_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigned int *outBufLen)
 {
+    pthread_mutex_lock(&mutex1);
     BPGImageInfo img_info_s, *img_info = &img_info_s;
     int w, h, y, size_of_line, bufferIncrement, x;
     uint8_t *rgb_line /*, *bmp_line*/;
@@ -145,6 +160,7 @@ static void bmp_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
     if (NULL == rgb_line)
     {
         printf("FAILED to allocate \n");
+        rgb_line = NULL;
         return;
     }
 
@@ -166,6 +182,7 @@ static void bmp_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
     {
         printf("FAILED to allocate \n");
         free(rgb_line);
+        rgb_line = NULL;
         return;
     }
     memset(*outBuf, 0, *outBufLen);
@@ -194,6 +211,7 @@ static void bmp_save_to_buffer(BPGDecoderContext *img, uint8_t **outBuf, unsigne
         free(rgb_line);
         rgb_line = NULL;
     }
+    pthread_mutex_unlock(&mutex1);
 }
 
 int bpg_get_buffer_size_from_bpg(uint8_t *bpgBuffer, int bpgBufferSize)
@@ -219,6 +237,17 @@ void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut, unsi
     if (NULL == bufIn || bufInLen == 0 || NULL == bufOut)
     {
         printf("Invalid input data \n");
+        if (bufIn)
+        {
+            free(bufIn);
+            bufIn = NULL;
+        }
+        if (bufOut)
+        {
+            free(bufOut);
+            bufOut = NULL;
+        }
+        img = NULL;
         return;
     }
 
@@ -226,6 +255,18 @@ void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut, unsi
 
     if (bpg_decoder_decode(img, bufIn, bufInLen) < 0)
     {
+        bpg_decoder_close(img);
+        img = NULL;
+        if (bufIn)
+        {
+            free(bufIn);
+            bufIn = NULL;
+        }
+        if (bufOut)
+        {
+            free(bufOut);
+            bufOut = NULL;
+        }
         fprintf(stderr, "Could not decode image\n");
         return;
     }
@@ -254,6 +295,7 @@ void decode_buffer(uint8_t *bufIn, unsigned int bufInLen, uint8_t **bufOut, unsi
     }
 
     bpg_decoder_close(img);
+    img = NULL;
 }
 
 void decode_file(char *bpgFilename, char *outFilename)
