@@ -18,6 +18,8 @@ import com.xmtj.bpgdecoder.db.DBHelperManager;
 
 import org.json.JSONArray;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -212,7 +214,7 @@ public class BPG {
 //                            // connected to the mobile provider's data plan
 //                            Log.i(BPG_TAG, "当前移动网络连接可用 ");
 //                        }
-                            if (!DecoderWrapper.getInitState() && null != packageName && null != token && null != singleThreadExecutor) {
+                            if (null != packageName && null != token && null != singleThreadExecutor) {
                                 singleThreadExecutor.execute(new Runnable() {
                                     @Override
                                     public void run() {
@@ -243,4 +245,26 @@ public class BPG {
 
         }
     };
+
+    /**
+     * 使用同步 避免oom
+     *
+     * @param input
+     * @return
+     */
+    public static synchronized byte[] decodeBpgBuffer(InputStream input) {
+        byte[] bytes = new byte[0];
+        try {
+            bytes = ByteTools.toByteArray(input);
+            if (null == bytes) {
+                Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
+            return null;
+        }
+        return DecoderWrapper.decodeBuffer(bytes, bytes.length);
+    }
 }

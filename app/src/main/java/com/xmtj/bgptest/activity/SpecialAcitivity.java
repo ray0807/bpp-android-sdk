@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.xmtj.bgptest.R;
+import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.core.DisplayImageOptions;
 import com.xmtj.imagedownloader.core.ImageLoader;
@@ -70,7 +71,7 @@ public class SpecialAcitivity extends Activity {
                     return;
                 }
                 try {
-                    byte[] b = DecoderWrapper.decodeBpgBuffer(is);
+                    byte[] b = BPG.decodeBpgBuffer(is);
                     iv_show.setImageBitmap(BitmapFactory.decodeByteArray(b, 0, b.length));
                 } catch (Exception e) {
                     e.printStackTrace();

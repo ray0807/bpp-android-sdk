@@ -59,7 +59,14 @@
 　　public static *;
 }
 
--keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
+-dontwarn com.xmtj.bpgdecoder.DecoderWrapper
+-keepclassmembers class com.xmtj.bpgdecoder.DecoderWrapper {
+  native *** init*(...);
+  native *** getInitState*(...);
+  native *** fetchDecodedBufferSize*(...);
+  native *** decodeBuffer*(...);
+}
+#-keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
 -keep class com.xmtj.bpgdecoder.iInterface.UrlCallback{ *;}
 -keep class com.xmtj.bpgdecoder.constant.Constants{ *;}
 

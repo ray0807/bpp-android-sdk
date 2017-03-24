@@ -6,6 +6,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Method:    fetchDecodedBufferSize
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
+        (JNIEnv *, jclass, jstring, jstring,jstring);
+
 /*
  * Method:    fetchDecodedBufferSize
  * Signature: ([BI)I
@@ -20,12 +28,6 @@ JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBuffe
 JNIEXPORT jbyteArray JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBufferV2
         (JNIEnv *, jclass, jbyteArray, jint);
 
-
-JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init
-        (JNIEnv *, jclass, jstring, jstring,jstring);
-
-JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState
-        (JNIEnv *, jclass);
 
 
 

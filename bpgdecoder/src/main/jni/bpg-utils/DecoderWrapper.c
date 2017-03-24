@@ -153,7 +153,10 @@ static int test_post_number(const char *packageName, const char *token, const ch
 
 JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env, jclass class, jstring packageName, jstring token, jstring currentTime)
 {
-
+    if (isVertify)
+    {
+        return;
+    }
     char app_key[100] = {0};
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 timestamp : %s", (*env)->GetStringUTFChars(env, currentTime, NULL));
     // __android_log_print(ANDROID_LOG_ERROR, TAG, "before md5 token : %s", (*env)->GetStringUTFChars(env, token, NULL));
@@ -187,10 +190,6 @@ JNIEXPORT void JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_init(JNIEnv *env,
     //__android_log_print(ANDROID_LOG_ERROR, TAG, "token : %s", (*env)->GetStringUTFChars(env, token, NULL));
 }
 
-JNIEXPORT jboolean JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_getInitState(JNIEnv *env, jclass class)
-{
-    return isVertify;
-}
 
 JNIEXPORT jint JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize(JNIEnv *env, jclass class, jbyteArray encBuffer, jint encBufferSize)
 {
@@ -254,8 +253,9 @@ JNIEXPORT jbyteArray JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBuffe
 }
 
 static JNINativeMethod method_table[] = {
+    {"init", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *)Java_com_xmtj_bpgdecoder_DecoderWrapper_init},
     {"fetchDecodedBufferSize", "([BI)I", (void *)Java_com_xmtj_bpgdecoder_DecoderWrapper_fetchDecodedBufferSize},
-    {"decodeBuffer", "([BI)[B", (void *)Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBuffer},
+    {"decodeBuffer", "([BI)[B", (void *)Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBuffer}
 };
 
 static int method_table_size = sizeof(method_table) / sizeof(method_table[0]);
