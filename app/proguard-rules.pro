@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#BPG 混淆控制
+-dontwarn com.xmtj.bpgdecoder.**
+-keep public class com.xmtj.bpgdecoder.**{*;}
