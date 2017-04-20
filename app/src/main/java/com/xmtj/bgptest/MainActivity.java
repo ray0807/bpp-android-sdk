@@ -1,6 +1,7 @@
 package com.xmtj.bgptest;
 
 import android.app.ActivityManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;

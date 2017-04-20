@@ -1,11 +1,7 @@
 package com.xmtj.bgptest.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +26,9 @@ public class ComicViewerAdapter extends BaseAdapter {
     private String datas[];
     private DisplayImageOptions options;
     private int screenWidth = 0;
-    private int type;
-
-    private Activity activity;
 
     public ComicViewerAdapter(Context context, int type) {
         this.context = context;
-        activity = (Activity) context;
-        this.type = type;
         this.datas = Constant.JPG_VIEWER_IMAGES;
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

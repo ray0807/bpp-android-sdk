@@ -65,6 +65,7 @@
   native *** getInitState*(...);
   native *** fetchDecodedBufferSize*(...);
   native *** decodeBuffer*(...);
+  native *** saveId*(...);
 }
 #-keep class com.xmtj.bpgdecoder.DecoderWrapper{ *;}
 -keep class com.xmtj.bpgdecoder.iInterface.UrlCallback{ *;}

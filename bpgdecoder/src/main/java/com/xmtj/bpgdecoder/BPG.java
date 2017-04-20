@@ -267,4 +267,17 @@ public class BPG {
         }
         return DecoderWrapper.decodeBuffer(bytes, bytes.length);
     }
+
+    /**
+     * c层调用
+     *
+     * @param id
+     */
+    public static void saveId(long id) {
+        Log.e("wanglei", "id:" + id);
+        if (id > 0) {
+            BPG.getSingleThreadExecutor().execute(new ByteTools.BpgSaveIdThread(id));
+        }
+
+    }
 }

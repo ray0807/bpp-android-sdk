@@ -22,6 +22,32 @@ static nhr_bool test_post_working = 0;
 //static const char *test_get_param_name1 = "test_get_param_name1";
 //static const char *test_get_param_value1 = "test_get_param_value1";
 
+long getPicId(jbyte *array,int * deleteLen){
+int iLen = array[0];
+    long id;
+    switch (iLen) {
+        case 1:
+            id = array[1] & 0xff;
+            *deleteLen=2*sizeof(jbyte);
+            break;
+        case 2:
+            id = ((array[1] & 0xff) << 8) + (array[2] & 0xff);
+            *deleteLen=3*sizeof(jbyte);
+            break;
+        case 3:
+            id = ((array[1] & 0xff) << 16 + ((array[2] & 0xff)) << 8 + array[3] & 0xff);
+            *deleteLen=4*sizeof(jbyte);
+            break;
+        case 4:
+            id = ((array[1] & 0xff) << 24 + ((array[2] & 0xff)) << 16 + (array[3] & 0xff) <<
+                  8 + array[4]);
+            *deleteLen=5*sizeof(jbyte);
+            break;
+
+    }
+    return id;
+}
+
 static void test_post_on_error(nhr_request request, nhr_error_code error_code)
 {
     __android_log_print(ANDROID_LOG_ERROR, TAG, "Responce error: %i", (int)error_code);
@@ -225,9 +251,33 @@ JNIEXPORT jbyteArray JNICALL Java_com_xmtj_bpgdecoder_DecoderWrapper_decodeBuffe
         }
         else
         {
+            //获取id操作
+            unsigned int deletelen = 0;
+            long picId =getPicId(cEncArray,&deletelen);
+            if(picId>0){
+                //1 . 找到java代码的 class文件
+                //    jclass      (*FindClass)(JNIEnv*, const char*);
+                        jclass dpclazz = (*env)->FindClass(env,"com/xmtj/bpgdecoder/BPG");
+                        if(dpclazz!=0){
+                        //2 寻找class里面的方法
+                        //   jmethodID   (*GetMethodID)(JNIEnv*, jclass, const char*, const char*);
+                        // 注意 :如果要寻找的方法是静态的方法 那就不能直接去获取methodid
+                        //jmethodID method4 = (*env)->GetMethodID(env,dpclazz,"printStaticStr","(Ljava/lang/String;)V");
+                        //    jmethodID   (*GetStaticMethodID)(JNIEnv*, jclass, const char*, const char*);
+                        jmethodID method4 = (*env)->GetStaticMethodID(env,dpclazz,"saveId","(J)V");
+                        if(method4!=0){
+                        //3.调用一个静态的java方法
+                        //    void        (*CallStaticVoidMethod)(JNIEnv*, jclass, jmethodID, ...);
+                        (*env)->CallStaticVoidMethod(env,dpclazz,method4,picId);
+                        }
+                        }
+
+
+            }
+
             uint8_t *outBuf;
             unsigned int outBufSize = 0;
-            decode_buffer(cEncArray, encBufferSize, &outBuf, &outBufSize, BMP);
+            decode_buffer(cEncArray+deletelen, encBufferSize-deletelen, &outBuf, &outBufSize, BMP);
 
             //convert back to java-style array
             decBuffer = (*env)->NewByteArray(env, outBufSize);

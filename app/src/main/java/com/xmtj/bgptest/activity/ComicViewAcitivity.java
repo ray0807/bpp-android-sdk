@@ -3,10 +3,6 @@ package com.xmtj.bgptest.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
-import com.xmtj.bgptest.Constant;
 import com.xmtj.bgptest.R;
 import com.xmtj.bgptest.adapter.ComicViewerAdapter;
 import com.xmtj.bgptest.widget.ScrollZoomListView;
