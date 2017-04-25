@@ -2,8 +2,10 @@ package com.xmtj.bgptest.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,9 @@ import com.xmtj.bpgdecoder.DecoderWrapper;
 import com.xmtj.imagedownloader.core.DisplayImageOptions;
 import com.xmtj.imagedownloader.core.ImageLoader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
@@ -65,15 +70,15 @@ public class SpecialAcitivity extends Activity {
         btn_load_special.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputStream is = getResources().openRawResource(R.raw.special1);
-                if (null == is) {
-                    Toast.makeText(SpecialAcitivity.this, "读取失败", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 try {
-                    byte[] b = BPG.decodeBpgBuffer(is);
-                    iv_show.setImageBitmap(BitmapFactory.decodeByteArray(b, 0, b.length));
-                } catch (Exception e) {
+                    FileInputStream fileInputStream = new FileInputStream(new File(Environment.getExternalStorageDirectory() + "/xmtj/1.xmtj"));
+                    byte[] decBuffer = BPG.decodeBpgBuffer(fileInputStream);
+                    int decBufferSize = decBuffer.length;
+                    if (decBuffer != null) {
+                        Bitmap bm = BitmapFactory.decodeByteArray(decBuffer, 0, decBufferSize);
+                        iv_show.setImageBitmap(bm);
+                    }
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
 

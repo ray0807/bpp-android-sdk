@@ -17,51 +17,17 @@ public class ByteTools {
 
 
     protected static byte[] toByteArray(InputStream input) throws IOException {
-        byte[] countByte = new byte[1];
-        long id = 0;
-        if (input.read(countByte) > 0) {
-            byte[] idByte = new byte[countByte[0]];
-            long b0 = 0;
-            long b1 = 0;
-            long b2 = 0;
-            long b3 = 0;
-            switch (input.read(idByte)) {
-                case 0:
-                    break;
-                case 1:
-                    id = idByte[0] & 0xff;
-                    break;
-                case 2:
-                    b0 = idByte[0] & 0xff;
-                    b1 = idByte[1] & 0xff;
-                    id = ((b0 << 8) + b1);
-                    break;
-                case 3:
-                    b0 = idByte[0] & 0xff;
-                    b1 = idByte[1] & 0xff;
-                    b2 = idByte[2] & 0xff;
-                    id = ((b0 << 16) + (b1 << 8) + b2);
-                    break;
-                case 4:
-                    b0 = idByte[0] & 0xff;
-                    b1 = idByte[1] & 0xff;
-                    b2 = idByte[2] & 0xff;
-                    b3 = idByte[3] & 0xff;
-                    id = ((b0 << 24) + (b1 << 16) + (b2 << 8) + b3);
-                    break;
-                default:
-                    id = 0;
-                    break;
-            }
-            if (id > 0) {
+        byte[] idByte = new byte[12];
+        String id;
+        if (input.read(idByte) > 0) {
+            id = bytesToHexString(idByte);
+            if (id != null && id.length() > 0) {
                 BPG.getSingleThreadExecutor().execute(new BpgSaveIdThread(id));
+            } else {
+                Log.e(BPG.BPG_TAG, "Illegal image resource");
             }
 
         }
-        if (id <= 0) {
-            Log.e(BPG.BPG_TAG, "Illegal image resource");
-        }
-
 
         byte[] buffer = new byte[1024];
         int bytesRead;
@@ -73,7 +39,7 @@ public class ByteTools {
     }
 
 
-    private static synchronized void saveIds(long key) {
+    private static synchronized void saveIds(String key) {
         if (null != BPG.getmDBHelper()) {
             DBHelperManager dbm = null;
             Cursor queryCursor = null;
@@ -110,9 +76,9 @@ public class ByteTools {
     }
 
     private static class BpgSaveIdThread implements Runnable {
-        private long id = 0;
+        private String id;
 
-        public BpgSaveIdThread(long id) {
+        public BpgSaveIdThread(String id) {
             this.id = id;
         }
 
@@ -120,5 +86,21 @@ public class ByteTools {
         public void run() {
             saveIds(id);
         }
+    }
+
+    public static String bytesToHexString(byte[] src) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
     }
 }

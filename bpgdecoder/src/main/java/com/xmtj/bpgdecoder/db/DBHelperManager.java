@@ -64,15 +64,15 @@ public class DBHelperManager {
 
 
     // ----------------Event HELPERS --------------------
-    public long addBpgCount(long key, int count) {
+    public long addBpgCount(String key, int count) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_COLUMN, key + "");
+        contentValues.put(KEY_COLUMN, key);
         contentValues.put(COUNT_COLUMN, count);
         return mDb.insert(BPG_TABLE, null, contentValues);
     }
 
-    public long updateBpgCount(long key, int count) {
-        String where = KEY_COLUMN + " = " + key;
+    public long updateBpgCount(String key, int count) {
+        String where = KEY_COLUMN + " = '" + key+"'";
         ContentValues contentValues = new ContentValues();
         contentValues.put(COUNT_COLUMN, count);
         return mDb.update(BPG_TABLE, contentValues, where, null);
@@ -93,11 +93,11 @@ public class DBHelperManager {
         }, null, null, null, null, null);
     }
 
-    public Cursor getBpgCount(long key) {
+    public Cursor getBpgCount(String key) {
         Cursor res = mDb.query(BPG_TABLE, new String[]{
                 KEY_COLUMN,
                 COUNT_COLUMN
-        }, KEY_COLUMN + " = " + key, null, null, null, null);
+        }, KEY_COLUMN + " = '" + key+"'", null, null, null, null);
 
         if (res != null) {
             res.moveToFirst();

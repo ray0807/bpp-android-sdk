@@ -147,16 +147,17 @@ public class BPG {
             try {
                 mDBhelperManager.open();
                 queryCursor = mDBhelperManager.getAllBpgCount();
-                List<Map<String, Long>> data = new ArrayList<>();
+                List<Map<String, String>> data = new ArrayList<>();
                 if (queryCursor != null) {
                     while (queryCursor.moveToNext()) {
-                        long bpg_key = queryCursor.getLong(0);//获取第二列的值
+                        String bpg_key = queryCursor.getString(0);//获取第二列的值
                         int count = queryCursor.getInt(1); //获取第一列的值,第一列的索引从0开始
-                        Map<String, Long> m = new HashMap<>();
+                        Map<String, String> m = new HashMap<>();
                         m.put("id", bpg_key);
-                        m.put("count", (long) count);
+                        m.put("count", count + "");
                         data.add(m);
                     }
+                    Log.e("wanglei", "data:" + data.toString());
                     if (data.size() > 0) {
                         JSONArray jsonArray = new JSONArray(data);
                         Map<String, String> params = new HashMap<>();
