@@ -257,7 +257,7 @@ public class BPG {
         byte[] bytes = new byte[0];
         try {
             bytes = ByteTools.toByteArray(input);
-            if (null == bytes) {
+            if (null == bytes || bytes.length == 0) {
                 Log.e(BPG.BPG_TAG, Constants.INPUTSTREAM_FORMAT_FAILED);
                 return null;
             }

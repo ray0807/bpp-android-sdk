@@ -114,7 +114,7 @@ static int test_post_number(const char *packageName, const char *token, const ch
 
     test_post_request = nhr_request_create();
 
-    nhr_request_set_url(test_post_request, "http", "testbpg.mkzcdn.com", "/sdk/index/check", 80);
+    nhr_request_set_url(test_post_request, "http", "testbpg.mkzcdn.com", "/sdk/index/check", 3000);
 
     nhr_request_set_method(test_post_request, nhr_method_POST);
     nhr_request_set_timeout(test_post_request, 10);

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
+import com.xmtj.bgptest.downloader.HttpLoggingInterceptor;
 import com.xmtj.bgptest.downloader.OkHttpImageDownloader;
 import com.xmtj.bpgdecoder.BPG;
 import com.xmtj.imagedownloader.cache.disc.naming.Md5FileNameGenerator;
@@ -45,7 +46,7 @@ public class App extends Application {
         config.denyCacheImageMultipleSizesInMemory();
         config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
 //        config.imageDecoder(new BpgImageDecoder(true));
-        config.imageDownloader(new OkHttpImageDownloader(context, new OkHttpClient()));
+        config.imageDownloader(new OkHttpImageDownloader(context, new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor()).build()));
         config.diskCacheSize(500 * 1024 * 1024); // 50 MiB
         config.tasksProcessingOrder(QueueProcessingType.FIFO);
         config.writeDebugLogs(); // Remove for release app
